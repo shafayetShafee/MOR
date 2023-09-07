@@ -1,12 +1,14 @@
 Package: MOR
-Title: What the Package Does (One Line, Title Case)
+Title: Calculate Median Odds Ratio (MOR) From the fitted Multilevel Binary Logistic Model
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Shafayet Khan", "Shafee", , "sshafee@isrt.ac.bd", role = c("aut", "cre"))
+Description: Provides postestimation function to calculate the Median Odds Ratio
+    from a multilevel binary logistic regression model fit. Currently this pacakge
+    only provides the median odds ratio in case of two-level random intercept model
+    and three-level random intercept model where the model are fitted using the 
+    packages 'GLMMadaptive' and 'glmmTMB'.
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
