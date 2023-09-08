@@ -55,8 +55,9 @@ mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
 
 #' @export
 mor.default <- function(object, ...) {
-  message(sprintf("`mor` does not work for models of class '%s'.", class(object)[1]))
-  message("It currently supports `MixMod` object (fitted model object) from `GLMMadaptive` package and `glmmTMB` object from `glmmTMB` package")
+  err_msg <- paste0(sprintf("`mor` does not work for models of class '%s'.", class(object)[1]),
+  "It currently supports `MixMod` object (fitted model object) from `GLMMadaptive` package and `glmmTMB` object from `glmmTMB` package")
+  stop(err_msg, call. = FALSE)
 }
 
 
