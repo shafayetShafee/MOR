@@ -11,11 +11,12 @@
 #'  Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param ... Currently not used.
 #'
-#' @return A named vector with elements:
-#'  * `mor`:      Estimate of Median Odds Ratio
-#'  * `se_mor`:   Standard Error of MOR
-#'  * `ci_lower`: Lower bound on the confidence interval of MOR
-#'  * `ci_upper`: Upper bound on the confidence interval of MOR
+#' @return a [tibble][tibble::tibble-package] with columns,
+#'  * `term`:      Name of the estimate
+#'  * `estimate`:  Estimate of Median Odds Ratio (MOR)
+#'  * `std.error`: Standard Error of MOR
+#'  * `ci_lower`:  Lower bound of the confidence interval of MOR
+#'  * `ci_upper`:  Upper bound of the confidence interval of MOR
 #'
 #' @examples
 #' library(GLMMadaptive)
@@ -32,12 +33,15 @@ mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
   UseMethod("mor")
 }
 
+
 #' @export
 mor.default <- function(object, ...) {
   message(sprintf("`mor` does not work for models of class '%s'.", class(object)[1]))
   message("It currently supports `MixMod` object (fitted model object) from `GLMMadaptive` package and `glmmTMB` object from `glmmTMB` package")
 }
 
+
+#' @importFrom stats qnorm
 #' @export
 mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
 
@@ -51,13 +55,15 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ..
     stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
   }
 
+  grp_var_name <- object$id_name
+
   sigma_u_sq_hat <- object$D[[1]]
   var_sigma_u_sq_hat <- vcov_orig_scale(object)
 
-  mor_hat <- exp(sqrt(2 * sigma_u_sq_hat) * stats::qnorm(0.75))
+  mor_hat <- exp(sqrt(2 * sigma_u_sq_hat) * qnorm(0.75))
   log_mor_hat <- log(mor_hat)
 
-  log_mor_int_expr <- function(x) sqrt(2 * x) * stats::qnorm(0.75)
+  log_mor_int_expr <- function(x) sqrt(2 * x) * qnorm(0.75)
   J <- numDeriv::jacobian(log_mor_int_expr, x = sigma_u_sq_hat)
   log_se_mor_hat <- as.numeric(sqrt(t(J) %*% var_sigma_u_sq_hat %*% J))
   se_mor_hat <- exp(log_se_mor_hat)
@@ -77,10 +83,15 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ..
     ci_upper = NULL
   }
 
-  return(c(
-    mor = mor_hat, se_mor = se_mor_hat, ci_lower = ci_lower, ci_upper = ci_upper
+  return(tibble::tibble(
+    term = paste0("mor_", grp_var_name),
+    estimate = mor_hat,
+    std.error = se_mor_hat,
+    ci_lower = ci_lower,
+    ci_upper = ci_upper
   ))
 }
+
 
 #' @importFrom stats qnorm vcov
 #' @export
@@ -142,8 +153,12 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
       ci_upper = NULL
     }
 
-    return(c(
-      mor = mor_hat, se_mor = se_mor_hat, ci_lower = ci_lower, ci_upper = ci_upper
+    return(tibble::tibble(
+      term = paste0("mor_", grp_var_names),
+      estimate = mor_hat,
+      std.error = se_mor_hat,
+      ci_lower = ci_lower,
+      ci_upper = ci_upper
     ))
 
   } else if(grp_var_no == 2) {
@@ -155,7 +170,7 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
     model_terms_names <- names(object$frame)
     nested_term_names <- paste0(setdiff(model_terms_names, fix_terms_names),
                                 collapse = ":")
-    # third_lvl_var_names <- setdiff(grp_var_names, nested_term_names)
+    third_lvl_var_names <- setdiff(grp_var_names, nested_term_names)
 
     sigma_ujk_idx <- grepl(nested_term_names, names(se_sigma_sq_hat), fixed = TRUE)
     sigma_ujk <- sigma_sq_hat[sigma_ujk_idx]
@@ -208,9 +223,12 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
       ci_2_upper = NULL
     }
 
-    return(c(
-      mor_1 = mor1_hat, se_mor_1 = se_mor1_hat, ci_lower_1 = ci_lower_1, ci_upper_1 = ci_upper_1,
-      mor_2 = mor2_hat, se_mor_2 = se_mor2_hat, ci_lower_2 = ci_lower_2, ci_upper_2 = ci_upper_2
+    return(tibble::tibble(
+      term = c(paste0("mor_", nested_term_names), paste0("mor_", third_lvl_var_names)),
+      estimate = c(mor1_hat, mor2_hat),
+      std.error = c(se_mor1_hat, se_mor2_hat),
+      ci_lower = c(ci_lower_1, ci_lower_2),
+      ci_upper = c(ci_upper_1, ci_upper_2)
     ))
 
   }
@@ -241,6 +259,28 @@ chol_transf <- function (x) {
   }
 }
 
+
+# copied from https://stackoverflow.com/a/76925070/10858321 by @statmerkur
+D_chol_to_D <- function(x) {
+  # transform the log-cholesky parameterized value back to original scale
+  D <- chol_transf(x)
+  D[upper.tri(D, diag = TRUE)]
+}
+
+
+#' @importFrom stats vcov
+vcov_orig_scale <- function(model) {
+  D <- model$D
+  D_chol_entries <- chol_transf(D)
+  V_chol <- vcov(model, parm = "var-cov")
+  J <- numDeriv::jacobian(D_chol_to_D, D_chol_entries)
+  V <- J %*% V_chol %*% t(J)
+  colnames(V) <- colnames(V_chol)
+  rownames(V) <- rownames(V_chol)
+  return(V)
+}
+
+
 # # taken from GLMMadaptive pkg
 # vcov.MixMod <- function (object, parm = "var-cov", ...) {
 #   parm <- match.arg(parm)
@@ -260,22 +300,3 @@ chol_transf <- function (x) {
 #     return(V[include, include, drop = FALSE])
 #   }
 # }
-
-# copied from https://stackoverflow.com/a/76925070/10858321 by @statmerkur
-D_chol_to_D <- function(x) {
-  # transform the log-cholesky parameterized value back to original scale
-  D <- chol_transf(x)
-  D[upper.tri(D, diag = TRUE)]
-}
-
-#' @importFrom stats vcov
-vcov_orig_scale <- function(model) {
-  D <- model$D
-  D_chol_entries <- chol_transf(D)
-  V_chol <- vcov(model, parm = "var-cov")
-  J <- numDeriv::jacobian(D_chol_to_D, D_chol_entries)
-  V <- J %*% V_chol %*% t(J)
-  colnames(V) <- colnames(V_chol)
-  rownames(V) <- rownames(V_chol)
-  return(V)
-}

@@ -23,12 +23,13 @@ Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
 \item{...}{Currently not used.}
 }
 \value{
-A named vector with elements:
+a \link[tibble:tibble-package]{tibble} with columns,
 \itemize{
-\item \code{mor}:      Estimate of Median Odds Ratio
-\item \code{se_mor}:   Standard Error of MOR
-\item \code{ci_lower}: Lower bound on the confidence interval of MOR
-\item \code{ci_upper}: Upper bound on the confidence interval of MOR
+\item \code{term}:      Name of the estimate
+\item \code{estimate}:  Estimate of Median Odds Ratio (MOR)
+\item \code{std.error}: Standard Error of MOR
+\item \code{ci_lower}:  Lower bound of the confidence interval of MOR
+\item \code{ci_upper}:  Upper bound of the confidence interval of MOR
 }
 }
 \description{
