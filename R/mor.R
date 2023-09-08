@@ -19,14 +19,33 @@
 #'  * `ci_upper`:  Upper bound of the confidence interval of MOR
 #'
 #' @examples
-#' library(GLMMadaptive)
-#' data("guImmun", package = "mlmRev")
-#' model <- mixed_model(fixed = immun ~ kid2p + mom25p + ord,
-#'                      random =  ~ 1 | mom,
-#'                      family = binomial("logit"),
-#'                      data = guImmun)
+#' data("mlm_data1")
+#' data("mlm_data2")
 #'
-#' mor(model)
+#' # fitting two level random intercept model using GLMMadaptive package
+#' model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
+#'                                     random =  ~ 1 | cluster,
+#'                                     family = binomial("logit"), data = mlm_data1)
+#' mor(model1)
+#'
+#' # fitting two level random intercept model using glmmTMB package
+#' model2 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (1 | cluster),
+#'                            family = binomial("logit"), data = mlm_data1)
+#'
+#' mor(model2)
+#'
+#' # fitting three level random intercept model using glmmTMB package
+#' model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+#'                           family = "binomial", data = mlm_data2)
+#'
+#' mor(model3)
+#'
+#' # or
+#' model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+#'                           family = "binomial", data = mlm_data2)
+#'
+#'
+#' mor(model4)
 #'
 #' @export
 mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
@@ -96,7 +115,6 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ..
 #' @importFrom stats qnorm vcov
 #' @export
 mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
-
   obj_family <- object$modelInfo$family
   if(obj_family$family != "binomial" && obj_family$link != "logit") {
     stop("MOR can only be calculated for Multilevel Binary Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
@@ -168,10 +186,15 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
 
     fix_terms_names <- names(attr(object$modelInfo$terms$cond$fixed, "dataClasses"))
     model_terms_names <- names(object$frame)
-    nested_term_names <- paste0(setdiff(model_terms_names, fix_terms_names),
-                                collapse = ":")
+    diff <- setdiff(model_terms_names, fix_terms_names)
+    possible_nested_term <- c(paste0(diff, collapse = ":"),
+                              paste0(rev(diff), collapse = ":"))
+    nested_term_names <- intersect(grp_var_names, possible_nested_term)
     third_lvl_var_names <- setdiff(grp_var_names, nested_term_names)
 
+    # nested_term_pattern <- paste0("[",
+    #                            paste0(possible_nested_term, collapse = "|")
+    #                            , "]")
     sigma_ujk_idx <- grepl(nested_term_names, names(se_sigma_sq_hat), fixed = TRUE)
     sigma_ujk <- sigma_sq_hat[sigma_ujk_idx]
     mor1_hat <- exp(sqrt(2 * sigma_ujk) * qnorm(0.75))

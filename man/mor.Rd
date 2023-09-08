@@ -36,13 +36,32 @@ a \link[tibble:tibble-package]{tibble} with columns,
 Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
 }
 \examples{
-library(GLMMadaptive)
-data("guImmun", package = "mlmRev")
-model <- mixed_model(fixed = immun ~ kid2p + mom25p + ord,
-                     random =  ~ 1 | mom,
-                     family = binomial("logit"),
-                     data = guImmun)
+data("mlm_data1")
+data("mlm_data2")
 
-mor(model)
+# fitting two level random intercept model using GLMMadaptive package
+model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
+                                    random =  ~ 1 | cluster,
+                                    family = binomial("logit"), data = mlm_data1)
+mor(model1)
+
+# fitting two level random intercept model using glmmTMB package
+model2 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (1 | cluster),
+                           family = binomial("logit"), data = mlm_data1)
+
+mor(model2)
+
+# fitting three level random intercept model using glmmTMB package
+model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+                          family = "binomial", data = mlm_data2)
+
+mor(model3)
+
+# or
+model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+                          family = "binomial", data = mlm_data2)
+
+
+mor(model4)
 
 }
