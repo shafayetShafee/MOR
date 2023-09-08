@@ -2,7 +2,7 @@
 % Please edit documentation in R/mor.R
 \name{mor}
 \alias{mor}
-\title{Calculate Median Odds Ratio from a fitted multilevel binary logistic model object}
+\title{Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.}
 \usage{
 mor(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...)
 }
@@ -32,12 +32,13 @@ A named vector with elements:
 }
 }
 \description{
-Calculate Median Odds Ratio from a fitted multilevel binary logistic model object
+Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
 }
 \examples{
 library(GLMMadaptive)
 data("guImmun", package = "mlmRev")
-model <- mixed_model(fixed = immun ~ kid2p + mom25p + ord, random =  ~ 1 | mom,
+model <- mixed_model(fixed = immun ~ kid2p + mom25p + ord,
+                     random =  ~ 1 | mom,
                      family = binomial("logit"),
                      data = guImmun)
 
