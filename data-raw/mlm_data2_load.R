@@ -1,4 +1,4 @@
-l = 20 # number of EA
+l = 70 # number of EA
 m = 30 # number of HH
 n = 5 # size of each HH
 N = l*m*n
@@ -12,7 +12,7 @@ x2b <- ifelse(x2 <= 0.5, 0, 1)
 sigma_u_sq <- 2.5
 sigma_v_sq <- 1.5
 
-beta0 <- -4.1
+beta0 <- -1
 beta1 <- 1.75
 beta2 <- 0.67
 

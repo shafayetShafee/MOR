@@ -1,9 +1,9 @@
 #' A Simulated Multilevel Data
 #'
-#' This data contains data of 20 Enumeration Areas (EA) where each EA contains 30 Households (HH) and
+#' This data contains data of 70 Enumeration Areas (EA) where each EA contains 30 Households (HH) and
 #' each HH has 5 individuals.
 #'
-#' @format A tibble with 3000 rows and 6 variables:
+#' @format A tibble with 10,500 rows and 6 variables:
 #' \describe{
 #'   \item{`ea`}{Enumeration Area ID}
 #'   \item{`hh`}{Household ID}

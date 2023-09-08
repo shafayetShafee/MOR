@@ -5,7 +5,7 @@
 \alias{mlm_data2}
 \title{A Simulated Multilevel Data}
 \format{
-A tibble with 3000 rows and 6 variables:
+A tibble with 10,500 rows and 6 variables:
 \describe{
 \item{\code{ea}}{Enumeration Area ID}
 \item{\code{hh}}{Household ID}
@@ -19,7 +19,7 @@ A tibble with 3000 rows and 6 variables:
 mlm_data2
 }
 \description{
-This data contains data of 20 Enumeration Areas (EA) where each EA contains 30 Households (HH) and
+This data contains data of 70 Enumeration Areas (EA) where each EA contains 30 Households (HH) and
 each HH has 5 individuals.
 }
 \keyword{datasets}
