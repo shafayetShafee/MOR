@@ -20,3 +20,6 @@ Suggests:
     GLMMadaptive,
     glmmTMB,
     mlmRev
+Depends: 
+    R (>= 2.10)
+LazyData: true
