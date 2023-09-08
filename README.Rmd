@@ -33,7 +33,7 @@ remotes::install_github("shafayetShafee/MOR")
 
 ## Example
 
-```{r example}
+```{r example, warning=FALSE}
 library(MOR)
 
 data("mlm_data1", package = "MOR")

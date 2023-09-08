@@ -45,10 +45,6 @@ mor(model1)
 # fitting two level random intercept model using glmmTMB package
 model2 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (1 | cluster),
                       family = binomial("logit"), data = mlm_data1)
-#> Warning in checkMatrixPackageVersion(): Package version inconsistency detected.
-#> TMB was built with Matrix version 1.6.0
-#> Current Matrix version is 1.5.4.1
-#> Please re-install 'TMB' from source using install.packages('TMB', type = 'source') or ask CRAN for a binary version of 'TMB' matching CRAN's 'Matrix' package
 
 mor(model2)
 #> # A tibble: 1 × 5
