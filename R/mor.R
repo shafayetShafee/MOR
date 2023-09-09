@@ -1,6 +1,7 @@
 #' Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
 #'
-#' @param object An `MixMod` object created by `GLMMadaptive::mixed_model()` or
+#' @param object An`glmerMod` object created by `lme4::glmer()` or an `MixMod` object
+#'   created by `GLMMadaptive::mixed_model()` or
 #'   an `glmmTMB` object created by `glmmTMB::glmmTMB()`.
 #' @param se Logical indicating whether or not to include the standard error of
 #'   MOR estimate. Defaults to `TRUE`.
@@ -22,10 +23,17 @@
 #' data("mlm_data1")
 #' data("mlm_data2")
 #'
+#' # fitting two level random intercept model using lme4 package
+#' model <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
+#'               family = "binomial", data = mlm_data1)
+#'
+#' mor(model)
+#'
 #' # fitting two level random intercept model using GLMMadaptive package
 #' model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
 #'                                     random =  ~ 1 | cluster,
-#'                                     family = binomial("logit"), data = mlm_data1)
+#'                                     family = binomial("logit"),
+#'                                     data = mlm_data1)
 #' mor(model1)
 #'
 #' # fitting two level random intercept model using glmmTMB package
@@ -40,8 +48,8 @@
 #'
 #' mor(model3)
 #'
-#' # or
-#' model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+#' # fitting three level random intercept model using lme4 package
+#' model4 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 #'                           family = "binomial", data = mlm_data2)
 #'
 #'
@@ -259,6 +267,117 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
 }
 
 
+#' @importFrom stats qnorm vcov
+#' @export
+mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+  s = summary(object)
+  if(s$family != "binomial" && s$link != "logit") {
+    stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
+         call. = FALSE)
+  }
+
+  ran_eff_df <- as.data.frame(s$varcor)
+  grp_var_no <- length(s$ngrps)
+  grp_var_name <- unique(ran_eff_df$grp)
+
+  if(grp_var_no == 1) {
+    if(nrow(ran_eff_df) > 1) {
+      stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
+    }
+
+    grp_var_name_pat <- paste0("cov_", grp_var_name, ".\\(Intercept\\)")
+    sigma_u_sq <- ran_eff_df$vcov
+    vcov_mat <- merDeriv::vcov.glmerMod(object, full = TRUE, ranpar = "sd")
+    idx = which(grepl(grp_var_name_pat, colnames(vcov_mat)))
+    se_sigma_u <- sqrt(diag(vcov_mat)[idx])
+
+    mor_hat <- exp(sqrt(2 * sigma_u_sq) * qnorm(0.75))
+    log_mor_hat <- log(mor_hat)
+    log_se_mor_hat <- sqrt(2) * qnorm(0.75) * se_sigma_u
+    se_mor_hat <- exp(log_se_mor_hat)
+
+    crit_val <- qnorm((1 - conf.level)/2, lower.tail = F)
+    ci <- log_mor_hat + c(-1, 1) * crit_val * log_se_mor_hat
+    ci_exp <- exp(ci)
+    ci_lower <- ci_exp[1]
+    ci_upper <- ci_exp[2]
+
+    if(!se) {
+      se_mor_hat = NULL
+    }
+
+    if(!conf.int) {
+      ci_lower = NULL
+      ci_upper = NULL
+    }
+
+    return(tibble::tibble(
+      term = paste0("mor_", grp_var_name),
+      estimate = mor_hat,
+      std.error = se_mor_hat,
+      ci_lower = ci_lower,
+      ci_upper = ci_upper
+    ))
+
+  } else if (grp_var_no == 2) {
+    if (nrow(ran_eff_df) > 2) {
+      stop("MOR can only be calculated for Three level random intercept model.", call. = FALSE)
+    }
+
+    sigma_hat <- ran_eff_df$sdcor
+    var_sigma_hat = diag(diag(2*solve(object@optinfo$derivs$Hessian))[1:2])
+
+    mor1_hat <- exp(sqrt(2 * sigma_hat[1]^2) * qnorm(0.75))
+    log_mor1_hat <- log(mor1_hat)
+    log_mor1_expr <- function(x) sqrt(2 * x^2) * qnorm(0.75)
+    J <- numDeriv::jacobian(log_mor1_expr, x = sigma_hat[1])
+    log_se_mor1_hat <- as.numeric(sqrt(t(J) %*% var_sigma_hat[1, 1] %*% J))
+    se_mor1_hat <- exp(log_se_mor1_hat)
+
+    mor2_hat <- exp(sqrt(2 * sum(sigma_hat^2)) * qnorm(0.75))
+    log_mor2_hat <- log(mor2_hat)
+    log_mor2_expr <- function(x) sqrt(2 * sum(x^2)) * qnorm(0.75)
+    J2 <- numDeriv::jacobian(log_mor2_expr, x = sigma_hat)
+    log_se_mor2_hat <- as.numeric(sqrt(J2 %*% var_sigma_hat %*% t(J2)))
+    se_mor2_hat <- exp(log_se_mor2_hat)
+
+    crit_val <- stats::qnorm((1 - conf.level)/2, lower.tail = F)
+
+    ci_1 <- log_mor1_hat + c(-1, 1) * crit_val * log_se_mor1_hat
+    ci_1_exp <- exp(ci_1)
+    ci_lower_1 <- ci_1_exp[1]
+    ci_upper_1 <- ci_1_exp[2]
+
+    ci_2 <- log_mor2_hat + c(-1, 1) * crit_val * log_se_mor2_hat
+    ci_2_exp <- exp(ci_2)
+    ci_lower_2 <- ci_2_exp[1]
+    ci_upper_2 <- ci_2_exp[2]
+
+    if(!se) {
+      se_mor1_hat = NULL
+      se_mor2_hat = NULL
+    }
+
+    if(!conf.int) {
+      ci_1_lower = NULL
+      ci_1_upper = NULL
+      ci_2_lower = NULL
+      ci_2_upper = NULL
+    }
+
+    return(tibble::tibble(
+      term = c(paste0("mor_", grp_var_name[1]), paste0("mor_", grp_var_name[2])),
+      estimate = c(mor1_hat, mor2_hat),
+      std.error = c(se_mor1_hat, se_mor2_hat),
+      ci_lower = c(ci_lower_1, ci_lower_2),
+      ci_upper = c(ci_upper_1, ci_upper_2)
+    ))
+  }
+}
+
+
+
+
 
 # helper funs -------------------------------------------------------------
 
@@ -303,24 +422,3 @@ vcov_orig_scale <- function(model) {
   rownames(V) <- rownames(V_chol)
   return(V)
 }
-
-
-# # taken from GLMMadaptive pkg
-# vcov.MixMod <- function (object, parm = "var-cov", ...) {
-#   parm <- match.arg(parm)
-#   V <- solve(object$Hessian)
-#   if (parm == "var-cov") {
-#     D <- object$D
-#     diag_D <- ncol(D) > 1 && all(abs(D[lower.tri(D)]) < sqrt(.Machine$double.eps))
-#     include <- if (diag_D) {
-#       unconstr_D <- log(diag(D))
-#       n_betas <- length(object$coefficients)
-#       seq(n_betas + 1, n_betas + length(unconstr_D))
-#     } else {
-#       unconstr_D <- chol_transf(D)
-#       n_betas <- length(object$coefficients)
-#       seq(n_betas + 1, n_betas + length(unconstr_D))
-#     }
-#     return(V[include, include, drop = FALSE])
-#   }
-# }

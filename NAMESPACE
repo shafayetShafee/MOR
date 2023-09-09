@@ -2,6 +2,7 @@
 
 S3method(mor,MixMod)
 S3method(mor,default)
+S3method(mor,glmerMod)
 S3method(mor,glmmTMB)
 export(mor)
 importFrom(stats,qnorm)
