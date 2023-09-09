@@ -154,6 +154,42 @@ test_that("Expecting Errors for mor.default", {
 })
 
 
+test_that("Check for equivalent answer of mor for different package fit (two level int)", {
 
+  data("mlm_data1")
+
+  model10 <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
+                       family = "binomial",
+                       data = mlm_data1)
+
+  model11 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
+                                      random =  ~ 1 | cluster,
+                                      family = "binomial", data = mlm_data1)
+
+
+  model12 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b +  (1 | cluster),
+                             family = "binomial",
+                             data = mlm_data1)
+
+  expect_equal(mor(model10), mor(model11), tolerance = 0.1)
+  expect_equal(mor(model10), mor(model11), tolerance = 0.1)
+  expect_equal(mor(model11), mor(model12), tolerance = 0.1)
+})
+
+
+test_that("Check for equivalent answer of mor for different package fit (three level int)", {
+
+  data("mlm_data2")
+
+  model13 <- lme4::glmer(Yijk ~ X1c + X2b +  (1 | ea:hh) + (1 | ea),
+                       family = "binomial",
+                       data = mlm_data2)
+
+  model14 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b +  (1 | ea:hh) + (1 | ea),
+                             family = "binomial",
+                             data = mlm_data2)
+
+  expect_equal(mor(model13), mor(model14), tolerance = 0.1)
+})
 
 

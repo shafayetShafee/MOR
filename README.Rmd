@@ -39,6 +39,12 @@ library(MOR)
 data("mlm_data1", package = "MOR")
 data("mlm_data2", package = "MOR")
 
+# fitting two level random intercept model using lme4 package
+model <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
+             family = "binomial", data = mlm_data1)
+
+mor(model)
+
 # fitting two level random intercept model using GLMMadaptive package
 model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
                               random =  ~ 1 | cluster,
@@ -57,10 +63,9 @@ model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 
 mor(model3)
 
-# or
-model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+# fitting three level random intercept model using lme4 package
+model4 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
                           family = "binomial", data = mlm_data2)
-
 
 mor(model4)
 ```
