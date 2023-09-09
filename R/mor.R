@@ -1,6 +1,7 @@
 #' Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
 #'
-#' @param object An `MixMod` object created by `GLMMadaptive::mixed_model()` or
+#' @param object An`glmerMod` object created by `lme4::glmer()` or an `MixMod` object
+#'   created by `GLMMadaptive::mixed_model()` or
 #'   an `glmmTMB` object created by `glmmTMB::glmmTMB()`.
 #' @param se Logical indicating whether or not to include the standard error of
 #'   MOR estimate. Defaults to `TRUE`.
@@ -22,10 +23,17 @@
 #' data("mlm_data1")
 #' data("mlm_data2")
 #'
+#' # fitting two level random intercept model using lme4 package
+#' model <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
+#'               family = "binomial", data = mlm_data1)
+#'
+#' mor(model)
+#'
 #' # fitting two level random intercept model using GLMMadaptive package
 #' model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
 #'                                     random =  ~ 1 | cluster,
-#'                                     family = binomial("logit"), data = mlm_data1)
+#'                                     family = binomial("logit"),
+#'                                     data = mlm_data1)
 #' mor(model1)
 #'
 #' # fitting two level random intercept model using glmmTMB package
@@ -40,8 +48,8 @@
 #'
 #' mor(model3)
 #'
-#' # or
-#' model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+#' # fitting three level random intercept model using lme4 package
+#' model4 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 #'                           family = "binomial", data = mlm_data2)
 #'
 #'
@@ -262,24 +270,23 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
 #' @importFrom stats qnorm vcov
 #' @export
 mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
-
   s = summary(object)
   if(s$family != "binomial" && s$link != "logit") {
     stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
          call. = FALSE)
   }
 
-  ran_eff <- s$varcor # (as variance)
+  ran_eff_df <- as.data.frame(s$varcor)
   grp_var_no <- length(s$ngrps)
-  grp_var_name <- names(ran_eff)
+  grp_var_name <- unique(ran_eff_df$grp)
 
   if(grp_var_no == 1) {
-    if(length(ran_eff) > 1) {
+    if(nrow(ran_eff_df) > 1) {
       stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
     }
 
     grp_var_name_pat <- paste0("cov_", grp_var_name, ".\\(Intercept\\)")
-    sigma_u_sq <- as.numeric(ran_eff)
+    sigma_u_sq <- ran_eff_df$vcov
     vcov_mat <- merDeriv::vcov.glmerMod(object, full = TRUE, ranpar = "sd")
     idx = which(grepl(grp_var_name_pat, colnames(vcov_mat)))
     se_sigma_u <- sqrt(diag(vcov_mat)[idx])
@@ -313,11 +320,10 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, 
     ))
 
   } else if (grp_var_no == 2) {
-    if (length(ran_eff) > 2) {
+    if (nrow(ran_eff_df) > 2) {
       stop("MOR can only be calculated for Three level random intercept model.", call. = FALSE)
     }
 
-    ran_eff_df <- as.data.frame(ran_eff)
     sigma_hat <- ran_eff_df$sdcor
     var_sigma_hat = diag(diag(2*solve(object@optinfo$derivs$Hessian))[1:2])
 

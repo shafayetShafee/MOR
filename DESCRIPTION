@@ -7,7 +7,7 @@ Description: Provides postestimation function to calculate the Median Odds Ratio
     (MOR) from a multilevel binary logistic regression model fit. Currently this package
     provides the Median Odds Ratio only in case of two-level random intercept model
     and three-level random intercept model where the model is fitted using the R
-    packages 'GLMMadaptive' or 'glmmTMB'.
+    packages 'lme4', 'GLMMadaptive' or 'glmmTMB'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

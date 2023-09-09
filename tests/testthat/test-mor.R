@@ -65,28 +65,73 @@ test_that("Expecting Errors for fitting three level random slope model using glm
   data("mlm_data2")
 
   # fitting two level random slope model using glmmTMB package
-  model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
+  model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
                             family = "binomial", data = mlm_data2)
 
   expect_error(
-    mor(model4),
+    mor(model3),
     "MOR can only be calculated for Three level random intercept model."
   )
 })
 
 
-test_that("Expecting Errors for fitting three level random slope model using glmmTMB", {
+test_that("Expecting Equal results for fitting three level random slope model using glmmTMB using different style", {
 
   data("mlm_data2")
 
   # fitting two level random slope model using glmmTMB package
-  model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
+  model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+                            family = "binomial", data = mlm_data2)
+
+  model5 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+                            family = "binomial", data = mlm_data2)
+
+  expect_equal(mor(model4), mor(model5))
+})
+
+
+test_that("Expecting Errors for fitting two level random slope model using lme4", {
+
+  data("mlm_data1")
+
+  # fitting two level random slope model using glmmTMB package
+  model6 <- lme4::glmer(Yij ~ X1c + X2b + (X1c | cluster),
+                             family = binomial("logit"), data = mlm_data1)
+
+  expect_error(
+    mor(model6),
+    "MOR can only be calculated for Two level random intercept model."
+  )
+})
+
+
+test_that("Expecting Errors for fitting three level random slope model using lme4", {
+
+  data("mlm_data2")
+
+  # fitting two level random slope model using glmmTMB package
+  model7 = lme4::glmer(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
                             family = "binomial", data = mlm_data2)
 
   expect_error(
-    mor(model4),
+    mor(model7),
     "MOR can only be calculated for Three level random intercept model."
   )
+})
+
+
+test_that("Expecting Equal results for fitting three level random slope model using lme4 using different style", {
+
+  data("mlm_data2")
+
+  # fitting two level random slope model using lme4 package
+  model8 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+                            family = "binomial", data = mlm_data2)
+
+  model9 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+                            family = "binomial", data = mlm_data2)
+
+  expect_equal(mor(model8), mor(model9))
 })
 
 
@@ -107,5 +152,8 @@ test_that("Expecting Errors for mor.default", {
     "`mor` does not work for models of class *."
   )
 })
+
+
+
 
 

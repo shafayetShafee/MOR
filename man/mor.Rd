@@ -7,7 +7,8 @@
 mor(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...)
 }
 \arguments{
-\item{object}{An \code{MixMod} object created by \code{GLMMadaptive::mixed_model()} or
+\item{object}{An\code{glmerMod} object created by \code{lme4::glmer()} or an \code{MixMod} object
+created by \code{GLMMadaptive::mixed_model()} or
 an \code{glmmTMB} object created by \code{glmmTMB::glmmTMB()}.}
 
 \item{se}{Logical indicating whether or not to include the standard error of
@@ -39,10 +40,17 @@ Calculate Median Odds Ratio from a fitted multilevel binary logistic model objec
 data("mlm_data1")
 data("mlm_data2")
 
+# fitting two level random intercept model using lme4 package
+model <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
+              family = "binomial", data = mlm_data1)
+
+mor(model)
+
 # fitting two level random intercept model using GLMMadaptive package
 model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
                                     random =  ~ 1 | cluster,
-                                    family = binomial("logit"), data = mlm_data1)
+                                    family = binomial("logit"),
+                                    data = mlm_data1)
 mor(model1)
 
 # fitting two level random intercept model using glmmTMB package
@@ -57,8 +65,8 @@ model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 
 mor(model3)
 
-# or
-model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea/hh),
+# fitting three level random intercept model using lme4 package
+model4 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
                           family = "binomial", data = mlm_data2)
 
 
