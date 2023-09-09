@@ -5,7 +5,7 @@
 \alias{mlm_data1}
 \title{A Simulated Multilevel Data}
 \format{
-A tibble with 1500 rows and 5 variables:
+A tibble with 5000 rows and 5 variables:
 \describe{
 \item{\code{cluster}}{Cluster ID}
 \item{\code{id}}{Individual ID}
@@ -18,6 +18,6 @@ A tibble with 1500 rows and 5 variables:
 mlm_data1
 }
 \description{
-This data contains data of 50 clusters where each cluster contains 30 individuals.
+This data contains data of 100 clusters where each cluster contains 50 individuals.
 }
 \keyword{datasets}

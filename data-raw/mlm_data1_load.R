@@ -1,5 +1,5 @@
-m = 50 # number of cluster
-n = 30 # size of each cluster
+m = 100 # number of cluster
+n = 50 # size of each cluster
 N = m*n
 
 set.seed(1083)

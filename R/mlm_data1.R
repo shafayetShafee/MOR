@@ -1,8 +1,8 @@
 #' A Simulated Multilevel Data
 #'
-#' This data contains data of 50 clusters where each cluster contains 30 individuals.
+#' This data contains data of 100 clusters where each cluster contains 50 individuals.
 #'
-#' @format A tibble with 1500 rows and 5 variables:
+#' @format A tibble with 5000 rows and 5 variables:
 #' \describe{
 #'   \item{`cluster`}{Cluster ID}
 #'   \item{`id`}{Individual ID}
