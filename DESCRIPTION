@@ -19,6 +19,7 @@ Imports:
     numDeriv,
     tibble
 Suggests: 
+    lme4,
     GLMMadaptive,
     glmmTMB,
     testthat (>= 3.0.0)
