@@ -15,12 +15,12 @@ RoxygenNote: 7.2.3
 URL: https://github.com/shafayetShafee/MOR
 BugReports: https://github.com/shafayetShafee/MOR/issues
 Imports:
+    merDeriv,
     numDeriv,
     tibble
 Suggests: 
     GLMMadaptive,
     glmmTMB,
-    mlmRev,
     testthat (>= 3.0.0)
 Depends: 
     R (>= 2.10)

@@ -259,6 +259,58 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
 }
 
 
+#' @importFrom stats qnorm
+#' @export
+mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+  s = summary(object)
+  if(s$family != "binomial" && s$link != "logit") {
+    stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
+         call. = FALSE)
+  }
+
+  if(!length(s$ngrps) == 1) {
+    stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
+  }
+
+  grp_var_name <- names(s$varcor)
+  grp_var_name_pat <- paste0("cov_", grp_var_name, ".\\(Intercept\\)")
+  sigma_b2_hat <- as.numeric(s$varcor)
+  vv <- merDeriv::vcov.glmerMod(object, full = TRUE, ranpar = "sd")
+  idx = which(grepl(grp_var_name_pat, colnames(vv)))
+  se_sigma_b <- sqrt(diag(vv)[idx])
+
+  mor_hat <- exp(sqrt(2 * sigma_b2_hat) * qnorm(0.75))
+  log_mor_hat <- log(mor_hat)
+  log_se_mor_hat <- sqrt(2) * qnorm(0.75) * se_sigma_b
+  se_mor_hat <- exp(log_se_mor_hat)
+
+  crit_val <- qnorm((1 - conf.level)/2, lower.tail = F)
+  ci <- log_mor_hat + c(-1, 1) * crit_val * log_se_mor_hat
+  ci_exp <- exp(ci)
+  ci_lower <- ci_exp[1]
+  ci_upper <- ci_exp[2]
+
+  if(!se) {
+    se_mor_hat = NULL
+  }
+
+  if(!conf.int) {
+    ci_lower = NULL
+    ci_upper = NULL
+  }
+
+  return(tibble::tibble(
+    term = paste0("mor_", grp_var_name),
+    estimate = mor_hat,
+    std.error = se_mor_hat,
+    ci_lower = ci_lower,
+    ci_upper = ci_upper
+  ))
+}
+
+
+
+
 
 # helper funs -------------------------------------------------------------
 
