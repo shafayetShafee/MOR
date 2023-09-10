@@ -11,6 +11,7 @@ the Median Odds Ratio (MOR) from a multilevel binary logistic regression
 model fit. Currently this package provides the median odds ratio in case
 of two-level random intercept model and three-level random intercept
 model only where the model is fitted using the R packages
+[`lme4`](https://github.com/lme4/lme4/) or
 [`GLMMadaptive`](https://drizopoulos.github.io/GLMMadaptive/index.html)
 or [`glmmTMB`](https://glmmtmb.github.io/glmmTMB/).
 
