@@ -1,4 +1,11 @@
 url: https://shafayetshafee.github.io/MOR/
 template:
   bootstrap: 5
+  bootswatch: flatly
+  theme: kate
+  bslib:
+    pkgdown-nav-height: 100px
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
 
