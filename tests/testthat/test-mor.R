@@ -1,5 +1,4 @@
 test_that("Expecting Errors for fitting models with family other than binomial", {
-
   # taken from
   # https://drizopoulos.github.io/GLMMadaptive/articles/GLMMadaptive.html
   set.seed(1234)
@@ -7,9 +6,11 @@ test_that("Expecting Errors for fitting models with family other than binomial",
   K <- 8
   t_max <- 15
 
-  DF <- data.frame(id = rep(seq_len(n), each = K),
-                   time = c(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
-                   sex = rep(gl(2, n/2, labels = c("male", "female")), each = K))
+  DF <- data.frame(
+    id = rep(seq_len(n), each = K),
+    time = c(replicate(n, c(0, sort(runif(K - 1, 0, t_max))))),
+    sex = rep(gl(2, n / 2, labels = c("male", "female")), each = K)
+  )
 
   X <- model.matrix(~ sex * time, data = DF)
 
@@ -20,8 +21,10 @@ test_that("Expecting Errors for fitting models with family other than binomial",
   eta_y <- drop(X %*% betas + b[DF$id])
   DF$y <- rpois(n * K, exp(eta_y))
 
-  gm1 <- GLMMadaptive::mixed_model(fixed = y ~ sex * time, random = ~ 1 | id, data = DF,
-                     family = poisson())
+  gm1 <- GLMMadaptive::mixed_model(
+    fixed = y ~ sex * time, random = ~ 1 | id, data = DF,
+    family = poisson()
+  )
   expect_error(
     mor(gm1),
     "MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link"
@@ -30,13 +33,14 @@ test_that("Expecting Errors for fitting models with family other than binomial",
 
 
 test_that("Expecting Errors for fitting two level random slope model using GLMMadaptive", {
-
   data("mlm_data1")
 
   # fitting two level random slope model using GLMMadaptive package
-  model1 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
-                                      random =  ~ X1c | cluster,
-                                      family = binomial("logit"), data = mlm_data1)
+  model1 <- GLMMadaptive::mixed_model(
+    fixed = Yij ~ X1c + X2b,
+    random = ~ X1c | cluster,
+    family = binomial("logit"), data = mlm_data1
+  )
 
   expect_error(
     mor(model1),
@@ -46,12 +50,12 @@ test_that("Expecting Errors for fitting two level random slope model using GLMMa
 
 
 test_that("Expecting Errors for fitting two level random slope model using glmmTMB", {
-
   data("mlm_data1")
 
   # fitting two level random slope model using glmmTMB package
   model2 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (X1c | cluster),
-                                      family = binomial("logit"), data = mlm_data1)
+    family = binomial("logit"), data = mlm_data1
+  )
 
   expect_error(
     mor(model2),
@@ -61,12 +65,12 @@ test_that("Expecting Errors for fitting two level random slope model using glmmT
 
 
 test_that("Expecting Errors for fitting three level random slope model using glmmTMB", {
-
   data("mlm_data2")
 
   # fitting two level random slope model using glmmTMB package
-  model3 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
-                            family = "binomial", data = mlm_data2)
+  model3 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
+    family = "binomial", data = mlm_data2
+  )
 
   expect_error(
     mor(model3),
@@ -76,27 +80,28 @@ test_that("Expecting Errors for fitting three level random slope model using glm
 
 
 test_that("Expecting Equal results for fitting three level random slope model using glmmTMB using different style", {
-
   data("mlm_data2")
 
   # fitting two level random slope model using glmmTMB package
-  model4 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
-                            family = "binomial", data = mlm_data2)
+  model4 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+    family = "binomial", data = mlm_data2
+  )
 
-  model5 = glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
-                            family = "binomial", data = mlm_data2)
+  model5 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+    family = "binomial", data = mlm_data2
+  )
 
   expect_equal(mor(model4), mor(model5))
 })
 
 
 test_that("Expecting Errors for fitting two level random slope model using lme4", {
-
   data("mlm_data1")
 
   # fitting two level random slope model using glmmTMB package
   model6 <- lme4::glmer(Yij ~ X1c + X2b + (X1c | cluster),
-                             family = binomial("logit"), data = mlm_data1)
+    family = binomial("logit"), data = mlm_data1
+  )
 
   expect_error(
     mor(model6),
@@ -106,12 +111,12 @@ test_that("Expecting Errors for fitting two level random slope model using lme4"
 
 
 test_that("Expecting Errors for fitting three level random slope model using lme4", {
-
   data("mlm_data2")
 
   # fitting two level random slope model using glmmTMB package
-  model7 = lme4::glmer(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
-                            family = "binomial", data = mlm_data2)
+  model7 <- lme4::glmer(Yijk ~ X1c + X2b + (X1c | ea:hh) + (1 | ea),
+    family = "binomial", data = mlm_data2
+  )
 
   expect_error(
     mor(model7),
@@ -121,26 +126,26 @@ test_that("Expecting Errors for fitting three level random slope model using lme
 
 
 test_that("Expecting Equal results for fitting three level random slope model using lme4 using different style", {
-
   data("mlm_data2")
 
   # fitting two level random slope model using lme4 package
-  model8 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
-                            family = "binomial", data = mlm_data2)
+  model8 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+    family = "binomial", data = mlm_data2
+  )
 
-  model9 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
-                            family = "binomial", data = mlm_data2)
+  model9 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
+    family = "binomial", data = mlm_data2
+  )
 
   expect_equal(mor(model8), mor(model9))
 })
 
 
 test_that("Expecting Errors for mor.default", {
-
   data("mlm_data1")
 
   # fitting two level random slope model using glmmTMB package
-  model5 = stats::glm(Yij ~ X1c + X2b, family = "binomial", data = mlm_data1)
+  model5 <- stats::glm(Yij ~ X1c + X2b, family = "binomial", data = mlm_data1)
 
   expect_error(
     mor(model5),
@@ -155,21 +160,24 @@ test_that("Expecting Errors for mor.default", {
 
 
 test_that("Check for equivalent answer of mor for different package fit (two level int)", {
-
   data("mlm_data1")
 
-  model10 <- lme4::glmer(Yij ~ X1c + X2b +  (1 | cluster),
-                       family = "binomial",
-                       data = mlm_data1)
+  model10 <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
+    family = "binomial",
+    data = mlm_data1
+  )
 
-  model11 <- GLMMadaptive::mixed_model(fixed = Yij ~ X1c + X2b,
-                                      random =  ~ 1 | cluster,
-                                      family = "binomial", data = mlm_data1)
+  model11 <- GLMMadaptive::mixed_model(
+    fixed = Yij ~ X1c + X2b,
+    random = ~ 1 | cluster,
+    family = "binomial", data = mlm_data1
+  )
 
 
-  model12 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b +  (1 | cluster),
-                             family = "binomial",
-                             data = mlm_data1)
+  model12 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (1 | cluster),
+    family = "binomial",
+    data = mlm_data1
+  )
 
   expect_equal(mor(model10), mor(model11), tolerance = 0.1)
   expect_equal(mor(model10), mor(model11), tolerance = 0.1)
@@ -178,18 +186,17 @@ test_that("Check for equivalent answer of mor for different package fit (two lev
 
 
 test_that("Check for equivalent answer of mor for different package fit (three level int)", {
-
   data("mlm_data2")
 
-  model13 <- lme4::glmer(Yijk ~ X1c + X2b +  (1 | ea:hh) + (1 | ea),
-                       family = "binomial",
-                       data = mlm_data2)
+  model13 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+    family = "binomial",
+    data = mlm_data2
+  )
 
-  model14 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b +  (1 | ea:hh) + (1 | ea),
-                             family = "binomial",
-                             data = mlm_data2)
+  model14 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea:hh) + (1 | ea),
+    family = "binomial",
+    data = mlm_data2
+  )
 
   expect_equal(mor(model13), mor(model14), tolerance = 0.1)
 })
-
-
