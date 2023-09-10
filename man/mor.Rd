@@ -7,9 +7,9 @@
 mor(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...)
 }
 \arguments{
-\item{object}{An\code{glmerMod} object created by \code{lme4::glmer()} or an \code{MixMod} object
-created by \code{GLMMadaptive::mixed_model()} or
-an \code{glmmTMB} object created by \code{glmmTMB::glmmTMB()}.}
+\item{object}{An \code{glmerMod} object created by \code{\link[lme4:glmer]{lme4::glmer()}} or an \code{MixMod} object
+created by \code{\link[GLMMadaptive:mixed_model]{GLMMadaptive::mixed_model()}} or
+an \code{glmmTMB} object created by \code{\link[glmmTMB:glmmTMB]{glmmTMB::glmmTMB()}}. See Details.}
 
 \item{se}{Logical indicating whether or not to include the standard error of
 MOR estimate. Defaults to \code{TRUE}.}
@@ -35,6 +35,12 @@ a \link[tibble:tibble-package]{tibble} with columns,
 }
 \description{
 Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
+}
+\details{
+Median Odds Ratio (MOR) is suggested as a measure of heterogeneity that quantifies
+cluster heterogeneity and facilitates a direct comparison between covariate effects
+and the magnitude of heterogeneity in terms of well-known odds ratios
+\insertCite{larsen2000interpreting,larsen2005appropriate}{MOR}
 }
 \examples{
 data("mlm_data1")
@@ -72,4 +78,7 @@ model4 = lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 
 mor(model4)
 
+}
+\references{
+\insertAllCited{}
 }
