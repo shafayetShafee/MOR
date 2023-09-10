@@ -1,3 +1,7 @@
+# MOR 0.2.1
+
+* Fixed a bug in making `NULL` when `conf.int = FALSE`
+
 # MOR 0.2.0
 
 * Added method for `glmerMod` object from `lme4::glmer`
