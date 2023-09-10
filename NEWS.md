@@ -1,3 +1,8 @@
+# MOR 0.2.0
+
+* Added method for `glmerMod` object from `lme4::glmer`
+* Added a bit info on MOR and references in function doc
+
 # MOR 0.1.0
 
 * Created the package.
