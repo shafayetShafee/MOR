@@ -466,6 +466,7 @@ check_args <- function(se, conf.int, conf.level) {
 
 
 # copied from https://github.com/r-gregmisc/gtools/blob/master/R/invalid.R
+#' @importFrom methods is
 invalid <- function(x) {
   if (missing(x) || is.null(x) || length(x) == 0 || is(x, "try-error")) {
     return(TRUE)

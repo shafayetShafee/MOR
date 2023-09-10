@@ -60,6 +60,7 @@ model1 <- GLMMadaptive::mixed_model(
   family = binomial("logit"),
   data = mlm_data1
 )
+
 mor(model1)
 
 # fitting two level random intercept model using glmmTMB package
