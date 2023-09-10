@@ -4,7 +4,14 @@
 # MOR
 
 <!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/Lifecycle-Stable-97ca00)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+![CRAN status](https://img.shields.io/badge/CRAN-not%20published-red)
+
 <!-- badges: end -->
+
+## Overview
 
 The goal of `MOR` is to provides post-estimation function to calculate
 the Median Odds Ratio (MOR) from a multilevel binary logistic regression
@@ -17,8 +24,8 @@ or [`glmmTMB`](https://glmmtmb.github.io/glmmTMB/).
 
 ## Installation
 
-You can install the development version of MOR from
-[GitHub](https://github.com/) with:
+`{MOR}` is not on CRAN yet. You can install the development version of
+MOR from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("remotes")

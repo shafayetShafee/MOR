@@ -12,6 +12,7 @@ Provides a postestimation function to calculate the Median Odds Ratio (MOR) from
 Useful links:
 \itemize{
   \item \url{https://github.com/shafayetShafee/MOR}
+  \item \url{https://shafayetshafee.github.io/MOR/}
   \item Report bugs at \url{https://github.com/shafayetShafee/MOR/issues}
 }
 

@@ -1,7 +1,8 @@
+title: MOR
 url: https://shafayetshafee.github.io/MOR/
 template:
   bootstrap: 5
-  bootswatch: flatly
+  bootswatch: lumen
   theme: kate
   bslib:
     pkgdown-nav-height: 100px
@@ -9,3 +10,19 @@ template:
     heading_font: {google: "Roboto Slab"}
     code_font: {google: "JetBrains Mono"}
 
+navbar:
+  structure:
+    left:  [reference, news]
+    right: [search, github, twitter]
+  components:
+    reference:
+      icon: fas fa-tools
+      text: Reference
+      href: reference/index.html
+    news:
+      icon: fas fa-clipboard-list
+      text: News
+      href: news/index.html
+    twitter:
+      icon: "fab fa-twitter"
+      href: https://twitter.com/shafayet_shafee
