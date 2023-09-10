@@ -90,3 +90,9 @@ mor(model4)
 #> 1 mor_ea:hh     4.21      1.06     3.78     4.68
 #> 2 mor_ea        6.29      1.08     5.38     7.36
 ```
+
+## Code of Conduct
+
+Please note that the MOR project is released with a [Contributor Code of
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

@@ -4,3 +4,8 @@
 ^data-raw$
 ^README\.Rmd$
 ^\.lintr$
+^CODE_OF_CONDUCT\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

@@ -76,3 +76,7 @@ model4 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 mor(model4)
 ```
 
+
+## Code of Conduct
+
+Please note that the MOR project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
