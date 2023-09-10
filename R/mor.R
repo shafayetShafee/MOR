@@ -1,8 +1,8 @@
 #' Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
 #'
-#' @param object An`glmerMod` object created by `lme4::glmer()` or an `MixMod` object
-#'   created by `GLMMadaptive::mixed_model()` or
-#'   an `glmmTMB` object created by `glmmTMB::glmmTMB()`.
+#' @param object An `glmerMod` object created by [`lme4::glmer()`] or an `MixMod` object
+#'   created by [`GLMMadaptive::mixed_model()`] or
+#'   an `glmmTMB` object created by [`glmmTMB::glmmTMB()`]. See Details.
 #' @param se Logical indicating whether or not to include the standard error of
 #'   MOR estimate. Defaults to `TRUE`.
 #' @param conf.int Logical indicating whether or not to include a confidence
@@ -12,12 +12,21 @@
 #'  Defaults to 0.95, which corresponds to a 95 percent confidence interval.
 #' @param ... Currently not used.
 #'
+#' @details
+#' Median Odds Ratio (MOR) is suggested as a measure of heterogeneity that quantifies
+#' cluster heterogeneity and facilitates a direct comparison between covariate effects
+#' and the magnitude of heterogeneity in terms of well-known odds ratios
+#' \insertCite{larsen2000interpreting,larsen2005appropriate}{MOR}
+#'
 #' @return a [tibble][tibble::tibble-package] with columns,
 #'  * `term`:      Name of the estimate
 #'  * `estimate`:  Estimate of Median Odds Ratio (MOR)
 #'  * `std.error`: Standard Error of MOR
 #'  * `ci_lower`:  Lower bound of the confidence interval of MOR
 #'  * `ci_upper`:  Upper bound of the confidence interval of MOR
+#'
+#' @references
+#' \insertAllCited{}
 #'
 #' @examples
 #' data("mlm_data1")
@@ -55,6 +64,7 @@
 #'
 #' mor(model4)
 #'
+#' @importFrom Rdpack reprompt
 #' @export
 mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
   UseMethod("mor")
@@ -422,3 +432,5 @@ vcov_orig_scale <- function(model) {
   rownames(V) <- rownames(V_chol)
   return(V)
 }
+
+
