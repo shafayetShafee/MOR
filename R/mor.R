@@ -46,6 +46,7 @@
 #'   family = binomial("logit"),
 #'   data = mlm_data1
 #' )
+#'
 #' mor(model1)
 #'
 #' # fitting two level random intercept model using glmmTMB package
@@ -73,6 +74,7 @@
 #' @importFrom Rdpack reprompt
 #' @export
 mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+  check_args(se, conf.int, conf.level)
   UseMethod("mor")
 }
 
@@ -436,4 +438,44 @@ vcov_orig_scale <- function(model) {
   colnames(V) <- colnames(V_chol)
   rownames(V) <- rownames(V_chol)
   return(V)
+}
+
+
+is_bool <- function(x) {
+  is.logical(x) && length(x) == 1L && !is.na(x)
+}
+
+
+check_logical <- function(x) {
+  if (invalid(x) || !is_bool(x)) {
+    stop(
+      paste0("`", substitute(x), "` must be a boolean i.e. `TRUE` or `FALSE`"),
+      call. = FALSE
+    )
+  }
+}
+
+
+check_args <- function(se, conf.int, conf.level) {
+  check_logical(se)
+  check_logical(conf.int)
+  if (invalid(conf.level) || !(conf.level > 0 && conf.level < 1)) {
+    stop("`conf.level` must be a numeric less than 1 and greated than 0", call. = FALSE)
+  }
+}
+
+
+# copied from https://github.com/r-gregmisc/gtools/blob/master/R/invalid.R
+#' @importFrom methods is
+invalid <- function(x) {
+  if (missing(x) || is.null(x) || length(x) == 0 || is(x, "try-error")) {
+    return(TRUE)
+  }
+  if (is.list(x)) {
+    return(all(sapply(x, invalid)))
+  } else if (is.vector(x)) {
+    return(all(is.na(x)))
+  } else {
+    return(FALSE)
+  }
 }
