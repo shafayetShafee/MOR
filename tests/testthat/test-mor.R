@@ -200,3 +200,92 @@ test_that("Check for equivalent answer of mor for different package fit (three l
 
   expect_equal(mor(model13), mor(model14), tolerance = 0.1)
 })
+
+
+test_that("Testing for valid arguments", {
+  data("mlm_data1")
+
+  model15 <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
+    family = "binomial", data = mlm_data1
+  )
+
+  expect_error(
+    mor(model15, se = NULL),
+    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, se = NA),
+    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, se = NaN),
+    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, se = 1),
+    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, se = "1"),
+    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.int = NULL),
+    "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.int = NA),
+    "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.int = NaN),
+    "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.int = 1),
+    "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.int = "1"),
+    "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
+  )
+
+  expect_error(
+    mor(model15, conf.level = 1),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+
+  expect_error(
+    mor(model15, conf.level = 0),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+
+  expect_error(
+    mor(model15, conf.level = 95),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+
+  expect_error(
+    mor(model15, conf.level = NULL),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+
+  expect_error(
+    mor(model15, conf.level = NA),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+
+  expect_error(
+    mor(model15, conf.level = NaN),
+    "`conf.level` must be a numeric less than 1 and greated than 0"
+  )
+})
