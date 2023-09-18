@@ -91,7 +91,8 @@ mor.default <- function(object, ...) {
 
 #' @importFrom stats qnorm
 #' @export
-mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+                       ranef.info = FALSE, ...) {
   obj_family <- object$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
     stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
@@ -131,19 +132,31 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ..
     ci_upper <- NULL
   }
 
+  # ranef info
+  ranef <- unname(sigma_u_sq_hat)
+  se_ranef <- unname(sqrt(as.numeric(var_sigma_u_sq_hat)))
+
+  if (!ranef.info) {
+    ranef <- NULL
+    se_ranef <- NULL
+  }
+
   return(tibble::tibble(
     term = paste0("mor_", grp_var_name),
     estimate = mor_hat,
     std.error = se_mor_hat,
     ci_lower = ci_lower,
-    ci_upper = ci_upper
+    ci_upper = ci_upper,
+    ranef_var_comp = ranef,
+    se_var_comp = se_ranef
   ))
 }
 
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+                        ranef.info = FALSE, ...) {
   obj_family <- object$modelInfo$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
     stop("MOR can only be calculated for Multilevel Binary Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
@@ -199,12 +212,23 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
       ci_upper <- NULL
     }
 
+    # ranef info
+    ranef <- unname(sigma_sq_hat)
+    se_ranef <- unname(sqrt(as.numeric(var_sigma_sq_hat)))
+
+    if (!ranef.info) {
+      ranef <- NULL
+      se_ranef <- NULL
+    }
+
     return(tibble::tibble(
       term = paste0("mor_", grp_var_names),
       estimate = mor_hat,
       std.error = se_mor_hat,
       ci_lower = ci_lower,
-      ci_upper = ci_upper
+      ci_upper = ci_upper,
+      ranef_var_comp = ranef,
+      se_var_comp = se_ranef
     ))
   } else if (grp_var_no == 2) {
     if (!ran_par_no == 2) {
@@ -272,12 +296,25 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
       ci_upper_2 <- NULL
     }
 
+    # ranef info
+    ranef <- unname(c(sigma_sq_hat[sigma_ujk_idx], sigma_sq_hat[!sigma_ujk_idx]))
+    se_ranef <- unname(sqrt(
+      c(var_sigma_sq_hat[sigma_ujk_idx], var_sigma_sq_hat[!sigma_ujk_idx])
+    ))
+
+    if (!ranef.info) {
+      ranef <- NULL
+      se_ranef <- NULL
+    }
+
     return(tibble::tibble(
       term = c(paste0("mor_", nested_term_names), paste0("mor_", third_lvl_var_names)),
       estimate = c(mor1_hat, mor2_hat),
       std.error = c(se_mor1_hat, se_mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
-      ci_upper = c(ci_upper_1, ci_upper_2)
+      ci_upper = c(ci_upper_1, ci_upper_2),
+      ranef_var_comp = ranef,
+      se_var_comp = se_ranef
     ))
   }
 }
@@ -285,7 +322,8 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, .
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
+mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+                         ranef.info = FALSE, ...) {
   s <- summary(object)
   if (s$family != "binomial" && s$link != "logit") {
     stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
@@ -328,12 +366,23 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, 
       ci_upper <- NULL
     }
 
+    # ranef info
+    ranef <- unname(sqrt(sigma_u_sq))
+    se_ranef <- unname(as.numeric(se_sigma_u))
+
+    if (!ranef.info) {
+      ranef <- NULL
+      se_ranef <- NULL
+    }
+
     return(tibble::tibble(
       term = paste0("mor_", grp_var_name),
       estimate = mor_hat,
       std.error = se_mor_hat,
       ci_lower = ci_lower,
-      ci_upper = ci_upper
+      ci_upper = ci_upper,
+      ranef_sd_comp = ranef,
+      se_sd_comp = se_ranef
     ))
   } else if (grp_var_no == 2) {
     if (nrow(ran_eff_df) > 2) {
@@ -381,12 +430,25 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, 
       ci_upper_2 <- NULL
     }
 
+    # ranef info
+    ranef <- unname(sigma_hat)
+    se_ranef <- unname(sqrt(as.numeric(
+      diag(var_sigma_hat)
+    )))
+
+    if (!ranef.info) {
+      ranef <- NULL
+      se_ranef <- NULL
+    }
+
     return(tibble::tibble(
       term = c(paste0("mor_", grp_var_name[1]), paste0("mor_", grp_var_name[2])),
       estimate = c(mor1_hat, mor2_hat),
       std.error = c(se_mor1_hat, se_mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
-      ci_upper = c(ci_upper_1, ci_upper_2)
+      ci_upper = c(ci_upper_1, ci_upper_2),
+      ranef_sd_comp = ranef,
+      se_sd_comp = se_ranef
     ))
   }
 }
