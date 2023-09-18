@@ -11,10 +11,15 @@ h2 {
 /* small box around version number*/
 small.nav-text {
   color: #fff! important;
-  background-color: #d98205;
-  padding-left: 5px;
-  padding-right:5px;
-  border-radius: 3px;
+  background-color: #999999;
+  padding: 0.2em 0.6em 0.2em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1.75;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25em;
 }
 
 /* don't underline functions, library calls, operators in code */
