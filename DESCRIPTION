@@ -1,6 +1,6 @@
 Package: MOR
 Title: Calculate Median Odds Ratio From a Fitted Multilevel Binary Logistic Model
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: 
     person("Shafayet Khan", "Shafee", , "sshafee@isrt.ac.bd", role = c("aut", "cre"))
 Description: Provides a postestimation function to calculate the Median Odds Ratio

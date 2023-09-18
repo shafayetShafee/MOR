@@ -1,3 +1,5 @@
+# MOR 0.2.2
+
 # MOR 0.2.1
 
 * Fixed a bug in making `NULL` when `conf.int = FALSE`
