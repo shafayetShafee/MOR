@@ -8,7 +8,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/Lifecycle-Stable-97ca00)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 ![CRAN status](https://img.shields.io/badge/CRAN-not%20published-red)
-
+[![test-coverage](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml)
+[![R-CMD-check](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
