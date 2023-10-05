@@ -3,10 +3,8 @@
 #' @param object An `glmerMod` object created by [`lme4::glmer()`] or an `MixMod` object
 #'   created by [`GLMMadaptive::mixed_model()`] or
 #'   an `glmmTMB` object created by [`glmmTMB::glmmTMB()`]. See Details.
-#' @param se Logical indicating whether or not to include the standard error of
-#'   MOR estimate. Defaults to `TRUE`.
 #' @param conf.int Logical indicating whether or not to include a confidence
-#'   interval in the tidied output. Defaults to `TRUE`.
+#'   interval using the Delta method in the tidied output. Defaults to `TRUE`.
 #' @param conf.level The confidence level to use for the confidence interval
 #'  if `conf.int = TRUE`. Must be strictly greater than 0 and less than 1.
 #'  Defaults to 0.95, which corresponds to a 95 percent confidence interval.
@@ -21,7 +19,6 @@
 #' @return a [tibble][tibble::tibble-package] with columns,
 #'  * `term`:      Name of the estimate
 #'  * `estimate`:  Estimate of Median Odds Ratio (MOR)
-#'  * `std.error`: Standard Error of MOR
 #'  * `ci_lower`:  Lower bound of the confidence interval of MOR
 #'  * `ci_upper`:  Upper bound of the confidence interval of MOR
 #'
@@ -38,6 +35,8 @@
 #' )
 #'
 #' mor(model)
+#' ## to get 90% CI
+#' mor(model, conf.level = 0.90)
 #'
 #' # fitting two level random intercept model using GLMMadaptive package
 #' model1 <- GLMMadaptive::mixed_model(
@@ -73,8 +72,8 @@
 #'
 #' @importFrom Rdpack reprompt
 #' @export
-mor <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...) {
-  check_args(se, conf.int, conf.level)
+mor <- function(object, conf.int = TRUE, conf.level = 0.95, ...) {
+  check_args(conf.int, conf.level)
   UseMethod("mor")
 }
 
@@ -91,7 +90,7 @@ mor.default <- function(object, ...) {
 
 #' @importFrom stats qnorm
 #' @export
-mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+mor.MixMod <- function(object, conf.int = TRUE, conf.level = 0.95,
                        ranef.info = FALSE, ...) {
   obj_family <- object$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
@@ -123,10 +122,6 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
   ci_lower <- ci_exp[1]
   ci_upper <- ci_exp[2]
 
-  if (!se) {
-    se_mor_hat <- NULL
-  }
-
   if (!conf.int) {
     ci_lower <- NULL
     ci_upper <- NULL
@@ -144,7 +139,6 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
   return(tibble::tibble(
     term = paste0("mor_", grp_var_name),
     estimate = mor_hat,
-    std.error = se_mor_hat,
     ci_lower = ci_lower,
     ci_upper = ci_upper,
     ranef_var_comp = ranef,
@@ -155,7 +149,7 @@ mor.MixMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
                         ranef.info = FALSE, ...) {
   obj_family <- object$modelInfo$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
@@ -203,10 +197,6 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     ci_lower <- ci_exp[1]
     ci_upper <- ci_exp[2]
 
-    if (!se) {
-      se_mor_hat <- NULL
-    }
-
     if (!conf.int) {
       ci_lower <- NULL
       ci_upper <- NULL
@@ -224,7 +214,6 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     return(tibble::tibble(
       term = paste0("mor_", grp_var_names),
       estimate = mor_hat,
-      std.error = se_mor_hat,
       ci_lower = ci_lower,
       ci_upper = ci_upper,
       ranef_var_comp = ranef,
@@ -284,11 +273,6 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     ci_lower_2 <- ci_2_exp[1]
     ci_upper_2 <- ci_2_exp[2]
 
-    if (!se) {
-      se_mor1_hat <- NULL
-      se_mor2_hat <- NULL
-    }
-
     if (!conf.int) {
       ci_lower_1 <- NULL
       ci_upper_1 <- NULL
@@ -310,7 +294,6 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     return(tibble::tibble(
       term = c(paste0("mor_", nested_term_names), paste0("mor_", third_lvl_var_names)),
       estimate = c(mor1_hat, mor2_hat),
-      std.error = c(se_mor1_hat, se_mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
       ci_upper = c(ci_upper_1, ci_upper_2),
       ranef_var_comp = ranef,
@@ -322,7 +305,7 @@ mor.glmmTMB <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
+mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
                          ranef.info = FALSE, ...) {
   s <- summary(object)
   if (s$family != "binomial" && s$link != "logit") {
@@ -357,10 +340,6 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     ci_lower <- ci_exp[1]
     ci_upper <- ci_exp[2]
 
-    if (!se) {
-      se_mor_hat <- NULL
-    }
-
     if (!conf.int) {
       ci_lower <- NULL
       ci_upper <- NULL
@@ -378,7 +357,6 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     return(tibble::tibble(
       term = paste0("mor_", grp_var_name),
       estimate = mor_hat,
-      std.error = se_mor_hat,
       ci_lower = ci_lower,
       ci_upper = ci_upper,
       ranef_sd_comp = ranef,
@@ -418,11 +396,6 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     ci_lower_2 <- ci_2_exp[1]
     ci_upper_2 <- ci_2_exp[2]
 
-    if (!se) {
-      se_mor1_hat <- NULL
-      se_mor2_hat <- NULL
-    }
-
     if (!conf.int) {
       ci_lower_1 <- NULL
       ci_upper_1 <- NULL
@@ -444,7 +417,6 @@ mor.glmerMod <- function(object, se = TRUE, conf.int = TRUE, conf.level = 0.95,
     return(tibble::tibble(
       term = c(paste0("mor_", grp_var_name[1]), paste0("mor_", grp_var_name[2])),
       estimate = c(mor1_hat, mor2_hat),
-      std.error = c(se_mor1_hat, se_mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
       ci_upper = c(ci_upper_1, ci_upper_2),
       ranef_sd_comp = ranef,
@@ -518,8 +490,7 @@ check_logical <- function(x) {
 }
 
 
-check_args <- function(se, conf.int, conf.level) {
-  check_logical(se)
+check_args <- function(conf.int, conf.level) {
   check_logical(conf.int)
   if (invalid(conf.level) || !(conf.level > 0 && conf.level < 1)) {
     stop("`conf.level` must be a numeric less than 1 and greated than 0", call. = FALSE)

@@ -4,18 +4,15 @@
 \alias{mor}
 \title{Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.}
 \usage{
-mor(object, se = TRUE, conf.int = TRUE, conf.level = 0.95, ...)
+mor(object, conf.int = TRUE, conf.level = 0.95, ...)
 }
 \arguments{
 \item{object}{An \code{glmerMod} object created by \code{\link[lme4:glmer]{lme4::glmer()}} or an \code{MixMod} object
 created by \code{\link[GLMMadaptive:mixed_model]{GLMMadaptive::mixed_model()}} or
 an \code{glmmTMB} object created by \code{\link[glmmTMB:glmmTMB]{glmmTMB::glmmTMB()}}. See Details.}
 
-\item{se}{Logical indicating whether or not to include the standard error of
-MOR estimate. Defaults to \code{TRUE}.}
-
 \item{conf.int}{Logical indicating whether or not to include a confidence
-interval in the tidied output. Defaults to \code{TRUE}.}
+interval using the Delta method in the tidied output. Defaults to \code{TRUE}.}
 
 \item{conf.level}{The confidence level to use for the confidence interval
 if \code{conf.int = TRUE}. Must be strictly greater than 0 and less than 1.
@@ -28,7 +25,6 @@ a \link[tibble:tibble-package]{tibble} with columns,
 \itemize{
 \item \code{term}:      Name of the estimate
 \item \code{estimate}:  Estimate of Median Odds Ratio (MOR)
-\item \code{std.error}: Standard Error of MOR
 \item \code{ci_lower}:  Lower bound of the confidence interval of MOR
 \item \code{ci_upper}:  Upper bound of the confidence interval of MOR
 }
@@ -52,6 +48,8 @@ model <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
 )
 
 mor(model)
+## to get 90\% CI
+mor(model, conf.level = 0.90)
 
 # fitting two level random intercept model using GLMMadaptive package
 model1 <- GLMMadaptive::mixed_model(
