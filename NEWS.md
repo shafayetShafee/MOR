@@ -1,3 +1,7 @@
+# MOR 0.2.3
+
+* Removed the argument to get `SE` of `MOR`, since the there was mistakes in implementation to get `SE` of `MOR`, but afraid not, `CI` was correctly calculated using the Delta method.
+
 # MOR 0.2.2
 
 * Done some internal changes
