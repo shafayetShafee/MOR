@@ -49,11 +49,16 @@ model <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
 )
 
 mor(model)
-#> # A tibble: 1 × 5
-#>   term        estimate std.error ci_lower ci_upper
-#>   <chr>          <dbl>     <dbl>    <dbl>    <dbl>
-#> 1 mor_cluster     4.42      1.13     3.51     5.58
-
+#> # A tibble: 1 × 4
+#>   term        estimate ci_lower ci_upper
+#>   <chr>          <dbl>    <dbl>    <dbl>
+#> 1 mor_cluster     4.42     3.51     5.58
+## to get 90% CI
+mor(model, conf.level = 0.90)
+#> # A tibble: 1 × 4
+#>   term        estimate ci_lower ci_upper
+#>   <chr>          <dbl>    <dbl>    <dbl>
+#> 1 mor_cluster     4.42     3.64     5.38
 
 # fitting two level random intercept model using GLMMadaptive package
 model1 <- GLMMadaptive::mixed_model(
@@ -63,10 +68,10 @@ model1 <- GLMMadaptive::mixed_model(
 )
 
 mor(model1)
-#> # A tibble: 1 × 5
-#>   term        estimate std.error ci_lower ci_upper
-#>   <chr>          <dbl>     <dbl>    <dbl>    <dbl>
-#> 1 mor_cluster     4.43      1.13     3.51     5.60
+#> # A tibble: 1 × 4
+#>   term        estimate ci_lower ci_upper
+#>   <chr>          <dbl>    <dbl>    <dbl>
+#> 1 mor_cluster     4.43     3.51     5.60
 
 
 # fitting two level random intercept model using glmmTMB package
@@ -75,10 +80,10 @@ model2 <- glmmTMB::glmmTMB(Yij ~ X1c + X2b + (1 | cluster),
 )
 
 mor(model2)
-#> # A tibble: 1 × 5
-#>   term        estimate std.error ci_lower ci_upper
-#>   <chr>          <dbl>     <dbl>    <dbl>    <dbl>
-#> 1 mor_cluster     4.42      1.13     3.50     5.59
+#> # A tibble: 1 × 4
+#>   term        estimate ci_lower ci_upper
+#>   <chr>          <dbl>    <dbl>    <dbl>
+#> 1 mor_cluster     4.42     3.50     5.59
 
 
 # fitting three level random intercept model using glmmTMB package
@@ -87,11 +92,11 @@ model3 <- glmmTMB::glmmTMB(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 )
 
 mor(model3)
-#> # A tibble: 2 × 5
-#>   term      estimate std.error ci_lower ci_upper
-#>   <chr>        <dbl>     <dbl>    <dbl>    <dbl>
-#> 1 mor_ea:hh     4.21      1.06     3.78     4.68
-#> 2 mor_ea        6.29      1.08     5.38     7.36
+#> # A tibble: 2 × 4
+#>   term      estimate ci_lower ci_upper
+#>   <chr>        <dbl>    <dbl>    <dbl>
+#> 1 mor_ea:hh     4.21     3.78     4.68
+#> 2 mor_ea        6.29     5.38     7.36
 
 
 # fitting three level random intercept model using lme4 package
@@ -100,11 +105,18 @@ model4 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 )
 
 mor(model4)
-#> # A tibble: 2 × 5
-#>   term      estimate std.error ci_lower ci_upper
-#>   <chr>        <dbl>     <dbl>    <dbl>    <dbl>
-#> 1 mor_ea:hh     4.21      1.06     3.78     4.68
-#> 2 mor_ea        6.29      1.08     5.38     7.36
+#> # A tibble: 2 × 4
+#>   term      estimate ci_lower ci_upper
+#>   <chr>        <dbl>    <dbl>    <dbl>
+#> 1 mor_ea:hh     4.21     3.78     4.68
+#> 2 mor_ea        6.29     5.38     7.36
+## to get 90% CI
+mor(model4, conf.level = 0.90)
+#> # A tibble: 2 × 4
+#>   term      estimate ci_lower ci_upper
+#>   <chr>        <dbl>    <dbl>    <dbl>
+#> 1 mor_ea:hh     4.21     3.85     4.60
+#> 2 mor_ea        6.29     5.52     7.18
 ```
 
 ## Code of Conduct

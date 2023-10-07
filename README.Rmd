@@ -52,7 +52,8 @@ model <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
 )
 
 mor(model)
-
+## to get 90% CI
+mor(model, conf.level = 0.90)
 
 # fitting two level random intercept model using GLMMadaptive package
 model1 <- GLMMadaptive::mixed_model(
@@ -86,6 +87,8 @@ model4 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
 )
 
 mor(model4)
+## to get 90% CI
+mor(model4, conf.level = 0.90)
 ```
 
 

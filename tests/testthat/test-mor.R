@@ -210,31 +210,6 @@ test_that("Testing for valid arguments", {
   )
 
   expect_error(
-    mor(model15, se = NULL),
-    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
-  )
-
-  expect_error(
-    mor(model15, se = NA),
-    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
-  )
-
-  expect_error(
-    mor(model15, se = NaN),
-    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
-  )
-
-  expect_error(
-    mor(model15, se = 1),
-    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
-  )
-
-  expect_error(
-    mor(model15, se = "1"),
-    "`se` must be a boolean i.e. `TRUE` or `FALSE`"
-  )
-
-  expect_error(
     mor(model15, conf.int = NULL),
     "`conf.int` must be a boolean i.e. `TRUE` or `FALSE`"
   )
