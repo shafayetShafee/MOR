@@ -2,21 +2,38 @@ title: MOR
 url: https://shafayetshafee.github.io/MOR/
 template:
   bootstrap: 5
-  bootswatch: lumen
-  theme: kate
+  # bootswatch: lumen
+  theme: breeze-light
+  theme-dark: breeze-dark
   bslib:
     pkgdown-nav-height: 100px
-    base_font: {google: "Roboto"}
-    heading_font: {google: "Roboto Slab"}
+    base_font: {google: "Source Sans Pro"}
+    heading_font: {google: "Fira Sans"}
     code_font: {google: "JetBrains Mono"}
 
 development:
   mode: auto
 
+home:
+  title: An R package to calculate the Median Odds Ratio From a fitted multilevel binary logistic model
+  description: >
+    This package provides a postestimation function to calculate the median odds
+    ratio (MOR) from a multilevel binary logistic regression model fit. Currently
+    this package provides the Median Odds Ratio only in case of two- and three-level
+    random intercept model where the model is fitted using the R packages 'lme4',
+    'GLMMadaptive' or 'glmmTMB'.
+  sidebar:
+    structure: [links, license, community, citation, authors, dev, toc]
+
 navbar:
   structure:
-    left:  [reference, news]
-    right: [search, github, twitter]
+    left:
+      - reference
+      - news
+    right:
+      - search
+      - github
+      - twitter
   components:
     reference:
       icon: fas fa-tools
@@ -26,6 +43,24 @@ navbar:
       icon: fas fa-clipboard-list
       text: News
       href: news/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/shafayetShafee/MOR/
+      aria-label: GitHub
     twitter:
-      icon: "fab fa-twitter"
-      href: https://twitter.com/shafayet_shafee
+      icon: fab fa-twitter fa-lg
+      href: https://x.com/shafayet_shafee
+      aria-label: X (formerly, Twitter)
+
+reference:
+- title: Simulated multilevel example data
+  contents:
+  - mlm_data1
+  - mlm_data2
+
+- title: Calculate Median Odds Ratio
+  contents:
+  - mor
+
+deploy:
+  install_metadata: true

@@ -6,7 +6,9 @@
 \alias{MOR-package}
 \title{MOR: Calculate Median Odds Ratio From a Fitted Multilevel Binary Logistic Model}
 \description{
-Provides a postestimation function to calculate the Median Odds Ratio (MOR) from a multilevel binary logistic regression model fit. Currently this package provides the Median Odds Ratio only in case of two-level random intercept model and three-level random intercept model where the model is fitted using the R packages 'lme4', 'GLMMadaptive' or 'glmmTMB'.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+This package provides a postestimation function to calculate the median odds ratio (MOR) from a multilevel binary logistic regression model fit. Currently this package provides the MOR point estimate and confidence interval only in case of two- and three-level random intercept model where the model is fitted using the R packages 'lme4', 'GLMMadaptive' or 'glmmTMB'.
 }
 \seealso{
 Useful links:
