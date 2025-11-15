@@ -1,0 +1,16 @@
+citHeader("To cite MOR in publications use:")
+
+bibentry(
+  key      = "MOR",
+  bibtype  = "Manual",
+  title    = "MOR: Calculate Median Odds Ratio From a Fitted Multilevel Binary Logistic Model",
+  author   = person(given = "Shafayet Khan",
+                   family = "Shafee",
+                   email = "sshafee@isrt.ac.bd",
+                   comment = c(ORCID = "0009-0002-8021-3788")),
+  note     = "R package version 0.2.3",
+  version  = "0.2.3",
+  year     = 2025,
+  doi      = "10.5281/zenodo.17619230",
+  url      = "https://doi.org/10.5281/zenodo.17619230"
+)

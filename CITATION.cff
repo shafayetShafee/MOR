@@ -1,0 +1,216 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "MOR" in publications use:'
+type: software
+license: MIT
+title: 'MOR: Calculate Median Odds Ratio From a Fitted Multilevel Binary Logistic
+  Model'
+version: 0.2.3
+doi: 10.5281/zenodo.17619230
+abstract: This package provides a postestimation function to calculate the median
+  odds ratio (MOR) from a multilevel binary logistic regression model fit. Currently
+  this package provides the MOR point estimate and confidence interval only in case
+  of two- and three-level random intercept model where the model is fitted using the
+  R packages 'lme4', 'GLMMadaptive' or 'glmmTMB'.
+authors:
+- family-names: Shafee
+  given-names: Shafayet Khan
+  email: sshafee@isrt.ac.bd
+  orcid: https://orcid.org/0009-0002-8021-3788
+preferred-citation:
+  type: manual
+  title: 'MOR: Calculate Median Odds Ratio From a Fitted Multilevel Binary Logistic
+    Model'
+  authors:
+  - family-names: Shafee
+    given-names: Shafayet Khan
+    email: sshafee@isrt.ac.bd
+    orcid: https://orcid.org/0009-0002-8021-3788
+  notes: R package version 0.2.3
+  version: 0.2.3
+  year: '2025'
+  doi: 10.5281/zenodo.17619230
+  url: https://doi.org/10.5281/zenodo.17619230
+repository-code: https://github.com/shafayetShafee/MOR
+url: https://shafayetshafee.github.io/MOR/
+contact:
+- family-names: Shafee
+  given-names: Shafayet Khan
+  email: sshafee@isrt.ac.bd
+  orcid: https://orcid.org/0009-0002-8021-3788
+keywords:
+- glmm
+- multilevel-models
+- r
+- r-package
+- rstats
+references:
+- type: software
+  title: merDeriv
+  abstract: 'merDeriv: Case-Wise and Cluster-Wise Derivatives for Mixed Effects Models'
+  notes: Imports
+  url: https://github.com/nctingwang/merDeriv
+  repository: https://CRAN.R-project.org/package=merDeriv
+  authors:
+  - family-names: Wang
+    given-names: Ting
+    email: szpku.grady@gmail.com
+  - family-names: Merkle
+    given-names: Edgar
+    email: merklee@missouri.edu
+    orcid: https://orcid.org/0000-0001-7158-0653
+  year: '2025'
+  doi: 10.32614/CRAN.package.merDeriv
+- type: software
+  title: methods
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2025'
+- type: software
+  title: numDeriv
+  abstract: 'numDeriv: Accurate Numerical Derivatives'
+  notes: Imports
+  url: http://optimizer.r-forge.r-project.org/
+  repository: https://CRAN.R-project.org/package=numDeriv
+  authors:
+  - family-names: Gilbert
+    given-names: Paul
+  - family-names: Varadhan
+    given-names: Ravi
+  year: '2025'
+  doi: 10.32614/CRAN.package.numDeriv
+- type: software
+  title: Rdpack
+  abstract: 'Rdpack: Update and Manipulate Rd Documentation Objects'
+  notes: Imports
+  url: https://geobosh.github.io/Rdpack/
+  repository: https://CRAN.R-project.org/package=Rdpack
+  authors:
+  - family-names: Boshnakov
+    given-names: Georgi N.
+    email: georgi.boshnakov@manchester.ac.uk
+    orcid: https://orcid.org/0000-0003-2839-346X
+  year: '2025'
+  doi: 10.32614/CRAN.package.Rdpack
+- type: software
+  title: tibble
+  abstract: 'tibble: Simple Data Frames'
+  notes: Imports
+  url: https://tibble.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=tibble
+  authors:
+  - family-names: Müller
+    given-names: Kirill
+    email: kirill@cynkra.com
+    orcid: https://orcid.org/0000-0002-1416-3412
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@rstudio.com
+  year: '2025'
+  doi: 10.32614/CRAN.package.tibble
+- type: software
+  title: lme4
+  abstract: 'lme4: Linear Mixed-Effects Models using ''Eigen'' and S4'
+  notes: Suggests
+  url: https://github.com/lme4/lme4/
+  repository: https://CRAN.R-project.org/package=lme4
+  authors:
+  - family-names: Bates
+    given-names: Douglas
+    orcid: https://orcid.org/0000-0001-8316-9503
+  - family-names: Maechler
+    given-names: Martin
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Bolker
+    given-names: Ben
+    email: bbolker+lme4@gmail.com
+    orcid: https://orcid.org/0000-0002-2127-0443
+  - family-names: Walker
+    given-names: Steven
+    orcid: https://orcid.org/0000-0002-4394-9078
+  year: '2025'
+  doi: 10.32614/CRAN.package.lme4
+- type: software
+  title: GLMMadaptive
+  abstract: 'GLMMadaptive: Generalized Linear Mixed Models using Adaptive Gaussian
+    Quadrature'
+  notes: Suggests
+  url: https://drizopoulos.github.io/GLMMadaptive/
+  repository: https://CRAN.R-project.org/package=GLMMadaptive
+  authors:
+  - family-names: Rizopoulos
+    given-names: Dimitris
+    email: d.rizopoulos@erasmusmc.nl
+    orcid: https://orcid.org/0000-0001-9397-0900
+  year: '2025'
+  doi: 10.32614/CRAN.package.GLMMadaptive
+- type: software
+  title: glmmTMB
+  abstract: 'glmmTMB: Generalized Linear Mixed Models using Template Model Builder'
+  notes: Suggests
+  url: https://github.com/glmmTMB/glmmTMB
+  repository: https://CRAN.R-project.org/package=glmmTMB
+  authors:
+  - family-names: Brooks
+    given-names: Mollie
+    email: mollieebrooks@gmail.com
+    orcid: https://orcid.org/0000-0001-6963-8326
+  - family-names: Bolker
+    given-names: Ben
+    orcid: https://orcid.org/0000-0002-2127-0443
+  - family-names: Kristensen
+    given-names: Kasper
+  - family-names: Maechler
+    given-names: Martin
+    orcid: https://orcid.org/0000-0002-8685-9910
+  - family-names: Magnusson
+    given-names: Arni
+    orcid: https://orcid.org/0000-0003-2769-6741
+  - family-names: Skaug
+    given-names: Hans
+    orcid: https://orcid.org/0000-0003-4235-2592
+  - family-names: Nielsen
+    given-names: Anders
+    orcid: https://orcid.org/0000-0001-9683-9262
+  - family-names: Berg
+    given-names: Casper
+    orcid: https://orcid.org/0000-0002-3812-5269
+  - family-names: Bentham
+    given-names: Koen
+    name-particle: van
+  year: '2025'
+  doi: 10.32614/CRAN.package.glmmTMB
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.testthat
+  version: '>= 3.0.0'
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  url: https://www.R-project.org/
+  authors:
+  - name: R Core Team
+  institution:
+    name: R Foundation for Statistical Computing
+    address: Vienna, Austria
+  year: '2025'
+  version: '>= 2.10'
+

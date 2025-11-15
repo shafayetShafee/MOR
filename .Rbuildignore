@@ -12,3 +12,4 @@
 ^codecov\.yml$
 ^CONTRIBUTING\.md$
 ^dev$
+^CITATION\.cff$
