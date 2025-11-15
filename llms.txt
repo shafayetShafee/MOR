@@ -1,10 +1,17 @@
 # MOR
 
-| Package Information                                                                                                       | Project Metadata                                                                                                                                 | Build & Testing                                                                                                                                                                      |
-|---------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![CRAN status](https://img.shields.io/badge/CRAN-not%20published-red?style=flat)                                          | [![Lifecycle: Stable](https://img.shields.io/badge/Lifecycle-Stable-2E8B57?style=flat)](https://lifecycle.r-lib.org/articles/stages.html#stable) | [![R-CMD-check](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml)       |
-| ![Dependencies](https://img.shields.io/badge/dependencies-4/26-green?style=flat)                                          | [![Project Status: Active](https://img.shields.io/badge/Status-Active-2E8B57?style=flat)](https://www.repostatus.org/#active)                    | [![test-coverage](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml) |
-| [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://choosealicense.com/licenses/mit/) | [![Codecov](https://codecov.io/gh/shafayetShafee/MOR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/shafayetShafee/MOR?branch=main)     | [![pkgdown](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml)                   |
+[![Lifecycle:
+Stable](https://img.shields.io/badge/Lifecycle-Stable-2E8B57?style=flat)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![Project Status:
+Active](https://img.shields.io/badge/Status-Active-2E8B57?style=flat)](https://www.repostatus.org/#active)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://choosealicense.com/licenses/mit/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17619229.svg)](https://doi.org/10.5281/zenodo.17619229)
+![Dependencies](https://img.shields.io/badge/dependencies-4/26-green?style=flat)[![Codecov](https://codecov.io/gh/shafayetShafee/MOR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/shafayetShafee/MOR?branch=main)
+![CRAN
+status](https://img.shields.io/badge/CRAN-not%20published-red?style=flat)[![R-CMD-check](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml)
 
 ## Overview
 
