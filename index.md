@@ -6,7 +6,7 @@
 | ![Dependencies](https://img.shields.io/badge/dependencies-4/26-green?style=flat)                                          | [![Project Status: Active](https://img.shields.io/badge/Status-Active-2E8B57?style=flat)](https://www.repostatus.org/#active)                    | [![test-coverage](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml) |
 | [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://choosealicense.com/licenses/mit/) | [![Codecov](https://codecov.io/gh/shafayetShafee/MOR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/shafayetShafee/MOR?branch=main)     | [![pkgdown](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml)                   |
 
-## Overview [![MOR website](reference/figures/logo.png)](https://shafayetshafee.github.io/MOR/)
+## Overview
 
 The goal of `MOR` is to provides post-estimation function to calculate
 the Median Odds Ratio (MOR) from a multilevel binary logistic regression

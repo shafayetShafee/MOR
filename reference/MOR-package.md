@@ -20,4 +20,4 @@ Useful links:
 ## Author
 
 **Maintainer**: Shafayet Khan Shafee <sshafee@isrt.ac.bd>
-([ORCID](https://orcid.org/0009-0002-8021-3788))
+([ORCID](https://orcid.org/0009-0002-8021-3788)) \[copyright holder\]
