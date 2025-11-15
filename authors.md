@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/shafayetShafee/MOR/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/shafayetShafee/MOR/blob/v0.2.3/DESCRIPTION)
 
 Shafee S (2025). *MOR: Calculate Median Odds Ratio From a Fitted
 Multilevel Binary Logistic Model*. R package version 0.2.3,
