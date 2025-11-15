@@ -2,7 +2,7 @@
 
 ## Authors
 
-- **Shafayet Khan Shafee**. Author, maintainer.
+- **Shafayet Khan Shafee**. Author, maintainer, copyright holder.
   [](https://orcid.org/0009-0002-8021-3788)
 
 ## Citation

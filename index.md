@@ -1,12 +1,18 @@
 # MOR
 
-## Overview
+| Package Information                                                                                                       | Project Metadata                                                                                                                                 | Build & Testing                                                                                                                                                                      |
+|---------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![CRAN status](https://img.shields.io/badge/CRAN-not%20published-red?style=flat)                                          | [![Lifecycle: Stable](https://img.shields.io/badge/Lifecycle-Stable-2E8B57?style=flat)](https://lifecycle.r-lib.org/articles/stages.html#stable) | [![R-CMD-check](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/R-CMD-check.yaml)       |
+| ![Dependencies](https://img.shields.io/badge/dependencies-4/26-green?style=flat)                                          | [![Project Status: Active](https://img.shields.io/badge/Status-Active-2E8B57?style=flat)](https://www.repostatus.org/#active)                    | [![test-coverage](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/test-coverage.yaml) |
+| [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://choosealicense.com/licenses/mit/) | [![Codecov](https://codecov.io/gh/shafayetShafee/MOR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/shafayetShafee/MOR?branch=main)     | [![pkgdown](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml)                   |
+
+## Overview [![MOR website](reference/figures/logo.png)](https://shafayetshafee.github.io/MOR/)
 
 The goal of `MOR` is to provides post-estimation function to calculate
 the Median Odds Ratio (MOR) from a multilevel binary logistic regression
-model fit. Currently this package provides the median odds ratio in case
-of two-level random intercept model and three-level random intercept
-model only where the model is fitted using the R packages
+model fit. Currently this package provides the MOR point estimate and
+confidence interval only in case of two- and three-level random
+intercept model where the model is fitted using the R packages
 [`lme4`](https://github.com/lme4/lme4/) or
 [`GLMMadaptive`](https://drizopoulos.github.io/GLMMadaptive/index.html)
 or [`glmmTMB`](https://glmmtmb.github.io/glmmTMB/).
@@ -16,6 +22,13 @@ or [`glmmTMB`](https://glmmtmb.github.io/glmmTMB/).
 [MOR](https://github.com/shafayetShafee/MOR) is not on CRAN yet. You can
 install the development version of MOR from
 [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("shafayetShafee/MOR")
+```
+
+or,
 
 ``` r
 # install.packages("remotes")
@@ -97,6 +110,7 @@ mor(model4)
 #>   <chr>        <dbl>    <dbl>    <dbl>
 #> 1 mor_ea:hh     4.21     3.78     4.68
 #> 2 mor_ea        6.29     5.38     7.36
+
 ## to get 90% CI
 mor(model4, conf.level = 0.90)
 #> # A tibble: 2 × 4
