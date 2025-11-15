@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# MOR 
+# MOR <a href="https://shafayetshafee.github.io/MOR/"><img src="man/figures/logo.png" alt="MOR logo" /></a>
 
 Package Information | Project Metadata | Build & Testing
 ------------------- | ---------------- | ----------------
@@ -20,7 +20,7 @@ Package Information | Project Metadata | Build & Testing
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://choosealicense.com/licenses/mit/) | [![Codecov](https://codecov.io/gh/shafayetShafee/MOR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/shafayetShafee/MOR?branch=main) | [![pkgdown](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/shafayetShafee/MOR/actions/workflows/pkgdown.yaml)
 
 
-## Overview <a href="https://shafayetshafee.github.io/MOR/"><img src="man/figures/logo.png" align="right" width="300" alt="MOR website" /></a>
+## Overview
 
 The goal of `MOR` is to provides post-estimation function to calculate the Median Odds Ratio
 (MOR) from a multilevel binary logistic regression model fit. Currently this package provides 

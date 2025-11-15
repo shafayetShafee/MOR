@@ -8,6 +8,7 @@ $footer-background: $faint-background !default;
   body { font-size: 20px }
 }
 
+
 // Headings ----------------------------------------------------
 // Use smaller headings with more vertical space
 
@@ -67,7 +68,6 @@ h2, h3, h4, h5, h6 {
   }
   img.logo {
     margin-left: 0;
-    display: none;
 
     @include media-breakpoint-down(sm) {
       width: 100px;

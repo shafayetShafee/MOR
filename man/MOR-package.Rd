@@ -20,7 +20,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Shafayet Khan Shafee \email{sshafee@isrt.ac.bd} (\href{https://orcid.org/0009-0002-8021-3788}{ORCID})
+\strong{Maintainer}: Shafayet Khan Shafee \email{sshafee@isrt.ac.bd} (\href{https://orcid.org/0009-0002-8021-3788}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}

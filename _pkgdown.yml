@@ -2,8 +2,7 @@ title: MOR
 url: https://shafayetshafee.github.io/MOR/
 template:
   bootstrap: 5
-  # bootswatch: lumen
-  theme: breeze-light
+  theme: kate
   theme-dark: breeze-dark
   bslib:
     pkgdown-nav-height: 100px
@@ -13,6 +12,10 @@ template:
 
 development:
   mode: auto
+
+authors:
+  Shafayet Khan Shafee:
+    href: https://github.com/shafayetShafee
 
 home:
   title: An R package to calculate the Median Odds Ratio From a fitted multilevel binary logistic model
