@@ -2,7 +2,7 @@
 
 ## Authors
 
-- **[Shafayet Khan Shafee](https://github.com/shafayetShafee)**. Author,
+- **[Shafayet Khan Shafee](https://shafayetshafee.github.io/)**. Author,
   maintainer, copyright holder.
   [](https://orcid.org/0009-0002-8021-3788)
 
