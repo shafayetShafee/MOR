@@ -2,21 +2,36 @@
 % Please edit documentation in R/mor.R
 \name{mor}
 \alias{mor}
-\title{Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.}
+\title{Calculate Median Odds Ratio (MOR) from a fitted multilevel binary
+logistic model object.}
 \usage{
-mor(object, conf.int = TRUE, conf.level = 0.95, ...)
+mor(
+  object,
+  conf_int = TRUE,
+  conf_level = 0.95,
+  conf.int = deprecated(),
+  conf.level = deprecated(),
+  ...
+)
 }
 \arguments{
-\item{object}{An \code{glmerMod} object created by \code{\link[lme4:glmer]{lme4::glmer()}} or an \code{MixMod} object
-created by \code{\link[GLMMadaptive:mixed_model]{GLMMadaptive::mixed_model()}} or
-an \code{glmmTMB} object created by \code{\link[glmmTMB:glmmTMB]{glmmTMB::glmmTMB()}}. See Details.}
+\item{object}{An \code{glmerMod} object created by \code{\link[lme4:glmer]{lme4::glmer()}} or an
+\code{MixMod} object created by \code{\link[GLMMadaptive:mixed_model]{GLMMadaptive::mixed_model()}} or an \code{glmmTMB}
+object created by \code{\link[glmmTMB:glmmTMB]{glmmTMB::glmmTMB()}}.}
 
-\item{conf.int}{Logical indicating whether or not to include a confidence
-interval using the Delta method in the tidied output. Defaults to \code{TRUE}.}
+\item{conf_int}{A \link[base:logical]{base::logical} indicating whether or not to include a
+confidence interval using the Delta method in the tidied output. Defaults
+to \code{TRUE}.}
 
-\item{conf.level}{The confidence level to use for the confidence interval
-if \code{conf.int = TRUE}. Must be strictly greater than 0 and less than 1.
+\item{conf_level}{The confidence level to use for the confidence interval
+if \code{conf_int = TRUE}. Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.}
+
+\item{conf.int}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use the \code{conf_int}
+argument instead.}
+
+\item{conf.level}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Please use the \code{conf_level}
+argument instead.}
 
 \item{...}{Currently not used.}
 }
@@ -30,12 +45,17 @@ a \link[tibble:tibble-package]{tibble} with columns,
 }
 }
 \description{
-Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
+\code{\link[=mor]{mor()}} is a post-estimation function to calculate the MOR from a fitted
+multilevel binary logistic regression model object. Currently \code{mor} provides
+the point estimate and confidence interval of the MOR, only in case of two-
+and three-level random intercept model where the model is fitted using
+\link[lme4:glmer]{lme4::glmer}, \link[GLMMadaptive:mixed_model]{GLMMadaptive::mixed_model} or \link[glmmTMB:glmmTMB]{glmmTMB::glmmTMB}.
 }
 \details{
-Median Odds Ratio (MOR) is suggested as a measure of heterogeneity that quantifies
-cluster heterogeneity and facilitates a direct comparison between covariate effects
-and the magnitude of heterogeneity in terms of well-known odds ratios
+Median Odds Ratio (MOR) is suggested as a measure of between-cluster
+heterogeneity in multilevel/hierarchical data settings, which facilitates
+a direct comparison between covariate effects and the magnitude of
+heterogeneity in terms of well-known odds ratios (OR)
 \insertCite{larsen2000interpreting,larsen2005appropriate}{MOR}
 }
 \examples{
@@ -48,6 +68,7 @@ model <- lme4::glmer(Yij ~ X1c + X2b + (1 | cluster),
 )
 
 mor(model)
+
 ## to get 90\% CI
 mor(model, conf.level = 0.90)
 
@@ -79,7 +100,6 @@ mor(model3)
 model4 <- lme4::glmer(Yijk ~ X1c + X2b + (1 | ea) + (1 | ea:hh),
   family = "binomial", data = mlm_data2
 )
-
 
 mor(model4)
 
