@@ -90,17 +90,26 @@ mor.default <- function(object, ...) {
 
 #' @importFrom stats qnorm
 #' @export
-mor.MixMod <- function(object, conf.int = TRUE, conf.level = 0.95,
-                       ranef.info = FALSE, ...) {
+mor.MixMod <- function(
+  object,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  ranef.info = FALSE,
+  ...
+) {
   obj_family <- object$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
-    stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
+    stop(
+      "MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
       call. = FALSE
     )
   }
 
   if (!all(dim(object$D) == 1)) {
-    stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
+    stop(
+      "MOR can only be calculated for Two level random intercept model.",
+      call. = FALSE
+    )
   }
 
   grp_var_name <- object$id_name
@@ -149,11 +158,17 @@ mor.MixMod <- function(object, conf.int = TRUE, conf.level = 0.95,
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
-                        ranef.info = FALSE, ...) {
+mor.glmmTMB <- function(
+  object,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  ranef.info = FALSE,
+  ...
+) {
   obj_family <- object$modelInfo$family
   if (obj_family$family != "binomial" && obj_family$link != "logit") {
-    stop("MOR can only be calculated for Multilevel Binary Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
+    stop(
+      "MOR can only be calculated for Multilevel Binary Logistic Regression Model i.e. for `MixMod` with `binomial` family with `logit` link",
       call. = FALSE
     )
   }
@@ -176,7 +191,10 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
 
   if (grp_var_no == 1) {
     if (ran_par_no > 1) {
-      stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
+      stop(
+        "MOR can only be calculated for Two level random intercept model.",
+        call. = FALSE
+      )
     }
 
     mor_hat <- exp(sqrt(2 * sigma_sq_hat) * qnorm(0.75))
@@ -221,10 +239,16 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
     ))
   } else if (grp_var_no == 2) {
     if (!ran_par_no == 2) {
-      stop("MOR can only be calculated for Three level random intercept model.", call. = FALSE)
+      stop(
+        "MOR can only be calculated for Three level random intercept model.",
+        call. = FALSE
+      )
     }
 
-    fix_terms_names <- names(attr(object$modelInfo$terms$cond$fixed, "dataClasses"))
+    fix_terms_names <- names(attr(
+      object$modelInfo$terms$cond$fixed,
+      "dataClasses"
+    ))
     model_terms_names <- names(object$frame)
     diff <- setdiff(model_terms_names, fix_terms_names)
     possible_nested_term <- c(
@@ -234,7 +258,11 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
     nested_term_names <- intersect(grp_var_names, possible_nested_term)
     third_lvl_var_names <- setdiff(grp_var_names, nested_term_names)
 
-    sigma_ujk_idx <- grepl(nested_term_names, names(se_sigma_sq_hat), fixed = TRUE)
+    sigma_ujk_idx <- grepl(
+      nested_term_names,
+      names(se_sigma_sq_hat),
+      fixed = TRUE
+    )
     sigma_ujk <- sigma_sq_hat[sigma_ujk_idx]
     mor1_hat <- exp(sqrt(2 * sigma_ujk) * qnorm(0.75))
     log_mor1_hat <- log(mor1_hat)
@@ -245,7 +273,9 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
     }
 
     J1 <- numDeriv::jacobian(log_mor1_expr, x = sigma_ujk)
-    log_se_mor1_hat <- as.numeric(sqrt(t(J1) %*% var_sigma_sq_hat[sigma_ujk_idx] %*% J1))
+    log_se_mor1_hat <- as.numeric(sqrt(
+      t(J1) %*% var_sigma_sq_hat[sigma_ujk_idx] %*% J1
+    ))
     se_mor1_hat <- exp(log_se_mor1_hat)
 
     # mor2 calc. ----------------------
@@ -281,7 +311,10 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
     }
 
     # ranef info
-    ranef <- unname(c(sigma_sq_hat[sigma_ujk_idx], sigma_sq_hat[!sigma_ujk_idx]))
+    ranef <- unname(c(
+      sigma_sq_hat[sigma_ujk_idx],
+      sigma_sq_hat[!sigma_ujk_idx]
+    ))
     se_ranef <- unname(sqrt(
       c(var_sigma_sq_hat[sigma_ujk_idx], var_sigma_sq_hat[!sigma_ujk_idx])
     ))
@@ -292,7 +325,10 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
     }
 
     return(tibble::tibble(
-      term = c(paste0("mor_", nested_term_names), paste0("mor_", third_lvl_var_names)),
+      term = c(
+        paste0("mor_", nested_term_names),
+        paste0("mor_", third_lvl_var_names)
+      ),
       estimate = c(mor1_hat, mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
       ci_upper = c(ci_upper_1, ci_upper_2),
@@ -305,11 +341,17 @@ mor.glmmTMB <- function(object, conf.int = TRUE, conf.level = 0.95,
 
 #' @importFrom stats qnorm vcov
 #' @export
-mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
-                         ranef.info = FALSE, ...) {
+mor.glmerMod <- function(
+  object,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  ranef.info = FALSE,
+  ...
+) {
   s <- summary(object)
   if (s$family != "binomial" && s$link != "logit") {
-    stop("MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
+    stop(
+      "MOR can only be calculated for Multilevel Logistic Regression Model i.e. for `glmerMod` with `binomial` family with `logit` link",
       call. = FALSE
     )
   }
@@ -320,7 +362,10 @@ mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
 
   if (grp_var_no == 1) {
     if (nrow(ran_eff_df) > 1) {
-      stop("MOR can only be calculated for Two level random intercept model.", call. = FALSE)
+      stop(
+        "MOR can only be calculated for Two level random intercept model.",
+        call. = FALSE
+      )
     }
 
     grp_var_name_pat <- paste0("cov_", grp_var_name, ".\\(Intercept\\)")
@@ -364,7 +409,10 @@ mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
     ))
   } else if (grp_var_no == 2) {
     if (nrow(ran_eff_df) > 2) {
-      stop("MOR can only be calculated for Three level random intercept model.", call. = FALSE)
+      stop(
+        "MOR can only be calculated for Three level random intercept model.",
+        call. = FALSE
+      )
     }
 
     sigma_hat <- ran_eff_df$sdcor
@@ -415,7 +463,10 @@ mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
     }
 
     return(tibble::tibble(
-      term = c(paste0("mor_", grp_var_name[1]), paste0("mor_", grp_var_name[2])),
+      term = c(
+        paste0("mor_", grp_var_name[1]),
+        paste0("mor_", grp_var_name[2])
+      ),
       estimate = c(mor1_hat, mor2_hat),
       ci_lower = c(ci_lower_1, ci_lower_2),
       ci_upper = c(ci_upper_1, ci_upper_2),
@@ -424,9 +475,6 @@ mor.glmerMod <- function(object, conf.int = TRUE, conf.level = 0.95,
     ))
   }
 }
-
-
-
 
 
 # helper funs -------------------------------------------------------------
@@ -493,7 +541,10 @@ check_logical <- function(x) {
 check_args <- function(conf.int, conf.level) {
   check_logical(conf.int)
   if (invalid(conf.level) || !(conf.level > 0 && conf.level < 1)) {
-    stop("`conf.level` must be a numeric less than 1 and greated than 0", call. = FALSE)
+    stop(
+      "`conf.level` must be a numeric less than 1 and greated than 0",
+      call. = FALSE
+    )
   }
 }
 
