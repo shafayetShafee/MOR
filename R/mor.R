@@ -1,19 +1,39 @@
-#' Calculate Median Odds Ratio from a fitted multilevel binary logistic model object.
+#' @title Calculate Median Odds Ratio (MOR) from a fitted multilevel binary
+#' logistic model object.
 #'
-#' @param object An `glmerMod` object created by [`lme4::glmer()`] or an `MixMod` object
-#'   created by [`GLMMadaptive::mixed_model()`] or
-#'   an `glmmTMB` object created by [`glmmTMB::glmmTMB()`]. See Details.
-#' @param conf.int Logical indicating whether or not to include a confidence
-#'   interval using the Delta method in the tidied output. Defaults to `TRUE`.
-#' @param conf.level The confidence level to use for the confidence interval
-#'  if `conf.int = TRUE`. Must be strictly greater than 0 and less than 1.
+#' @description
+#' [mor()] is a post-estimation function to calculate the MOR from a fitted
+#' multilevel binary logistic regression model object. Currently `mor` provides
+#' the point estimate and confidence interval of the MOR, only in case of two-
+#' and three-level random intercept model where the model is fitted using
+#' [lme4::glmer], [GLMMadaptive::mixed_model] or [glmmTMB::glmmTMB].
+#'
+#'
+#' @param object An `glmerMod` object created by [`lme4::glmer()`] or an
+#'   `MixMod` object created by [`GLMMadaptive::mixed_model()`] or an `glmmTMB`
+#'   object created by [`glmmTMB::glmmTMB()`].
+#'
+#' @param conf_int A [base::logical] indicating whether or not to include a
+#'   confidence interval using the Delta method in the tidied output. Defaults
+#'   to `TRUE`.
+#'
+#' @param conf_level The confidence level to use for the confidence interval
+#'  if `conf_int = TRUE`. Must be strictly greater than 0 and less than 1.
 #'  Defaults to 0.95, which corresponds to a 95 percent confidence interval.
+#'
+#' @param conf.int `r lifecycle::badge("deprecated")` Please use the `conf_int`
+#'   argument instead.
+#'
+#' @param conf.level `r lifecycle::badge("deprecated")` Please use the `conf_level`
+#'   argument instead.
+#'
 #' @param ... Currently not used.
 #'
 #' @details
-#' Median Odds Ratio (MOR) is suggested as a measure of heterogeneity that quantifies
-#' cluster heterogeneity and facilitates a direct comparison between covariate effects
-#' and the magnitude of heterogeneity in terms of well-known odds ratios
+#' Median Odds Ratio (MOR) is suggested as a measure of between-cluster
+#' heterogeneity in multilevel/hierarchical data settings, which facilitates
+#' a direct comparison between covariate effects and the magnitude of
+#' heterogeneity in terms of well-known odds ratios (OR)
 #' \insertCite{larsen2000interpreting,larsen2005appropriate}{MOR}
 #'
 #' @return a [tibble][tibble::tibble-package] with columns,
@@ -35,6 +55,7 @@
 #' )
 #'
 #' mor(model)
+#'
 #' ## to get 90% CI
 #' mor(model, conf.level = 0.90)
 #'
@@ -67,24 +88,77 @@
 #'   family = "binomial", data = mlm_data2
 #' )
 #'
-#'
 #' mor(model4)
 #'
 #' @importFrom Rdpack reprompt
+#' @importFrom lifecycle deprecated
 #' @export
-mor <- function(object, conf.int = TRUE, conf.level = 0.95, ...) {
-  check_args(conf.int, conf.level)
+mor <- function(
+    object,
+    conf_int = TRUE,
+    conf_level = 0.95,
+    conf.int = deprecated(),
+    conf.level = deprecated(),
+    ...
+  ) {
+  if (lifecycle::is_present(conf.int)) {
+    lifecycle::deprecate_warn(
+      when = "0.3.0",
+      what = "mor(conf.int)",
+      with = "mor(conf_int)"
+    )
+    conf_int <- conf.int
+  }
+
+  if (lifecycle::is_present(conf.level)) {
+    lifecycle::deprecate_warn(
+      when = "0.3.0",
+      what = "mor(conf.level)",
+      with = "mor(conf_level)"
+    )
+    conf_level <- conf.level
+  }
+
+  check_args(conf_int, conf_level)
   UseMethod("mor")
 }
 
 
 #' @export
 mor.default <- function(object, ...) {
-  err_msg <- paste0(
-    sprintf("`mor` does not work for models of class '%s'.", class(object)[1]),
-    "It currently supports `MixMod` object (fitted model object) from `GLMMadaptive` package and `glmmTMB` object from `glmmTMB` package"
+  object_class <- class(object)[1]
+
+  supported_class <- c(
+    "lme4" = "glmerMod",
+    "GLMMadaptive" = "mixed_model",
+    "glmmTMB" = "glmmTMB"
   )
-  stop(err_msg, call. = FALSE)
+
+  cls_list_msg <- paste0(
+    "{.green ",
+    supported_class,
+    "} from {.pkg ",
+    names(supported_class),
+    "} package"
+  )
+
+  cli::cli_div(
+    theme = list(
+      span.red = list(color = "red"),
+      span.green = list(color = "green"),
+      '.bullet-empty' = list(
+        `margin-left` = 2,
+        `margin-top` = 0.5,
+        before = paste0(cli::symbol$arrow_right, " ")
+      )
+    )
+  )
+
+  cli::cli_abort(c(
+    "x" = "{.fn mor} does not support models of class {.red {object_class}}",
+    "i" = "It currently supports the following fitted model objects of class: ",
+    cls_list_msg
+  ))
 }
 
 
